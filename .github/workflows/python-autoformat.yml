@@ -1,0 +1,21 @@
+# Workflow for checking autoformatter compliance of Python files.
+#
+# Refs:
+#   https://black.readthedocs.io/en/stable/integrations/github_actions.html
+name: Python Autoformat
+
+on: [pull_request]
+
+jobs:
+  autoformat:
+    name: Python Autoformat
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - name: Check for Autoformatter Errors
+        uses: psf/black@stable
+        with:
+          version: "22.10.0"
+          options: "--check"
