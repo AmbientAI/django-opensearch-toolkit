@@ -43,7 +43,7 @@ class KnnVectorMethodName(enum.Enum):
     IVF = "ivf"
 
 
-class kNNVectorSpace(enum.Enum):
+class KnnVectorSpace(enum.Enum):
     """Supported approximate-kNN metric spaces.
 
     Refs:
@@ -57,7 +57,7 @@ class kNNVectorSpace(enum.Enum):
     INNERPRODUCT = "innerproduct"  # Not supported for the LUCENE engine.
 
 
-class kNNVectorEngine(enum.Enum):
+class KnnVectorEngine(enum.Enum):
     """Supported approximate-kNN engines.
 
     Refs:
@@ -78,8 +78,8 @@ class KnnVectorMethod:
     """
 
     name: KnnVectorMethodName
-    space_type: Optional[kNNVectorSpace] = None
-    engine: Optional[kNNVectorEngine] = None
+    space_type: Optional[KnnVectorSpace] = None
+    engine: Optional[KnnVectorEngine] = None
     parameters: Optional[Dict] = None
 
     def to_dict(self) -> Dict:

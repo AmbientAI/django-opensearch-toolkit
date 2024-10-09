@@ -4,7 +4,7 @@ from .knn_vector import (
     KnnVector,
     KnnVectorDataType,
     KnnVectorMethodName,
-    kNNVectorSpace,
-    kNNVectorEngine,
+    KnnVectorSpace,
+    KnnVectorEngine,
     KnnVectorMethod,
 )
