@@ -14,6 +14,7 @@ class Command(OpenSearchCommand):
     help = "Display previously-run migrations for an OpenSearch cluster"
 
     def add_arguments(self, parser: CommandParser) -> None:
+        """Define arguments for this command."""
         parser.add_argument(
             "cluster",
             type=str,
@@ -22,6 +23,7 @@ class Command(OpenSearchCommand):
         )
 
     def handle(self, *args: Any, **options: Any) -> None:
+        """Run the command."""
         del args  # unused
         cluster: str = options["cluster"]
 

@@ -83,6 +83,7 @@ class KnnVectorMethod:
     parameters: Optional[Dict] = None
 
     def to_dict(self) -> Dict:
+        """Represent the method as a dictionary."""
         as_dict: Dict[str, Any] = {}
         as_dict["name"] = self.name.value
         if self.space_type:

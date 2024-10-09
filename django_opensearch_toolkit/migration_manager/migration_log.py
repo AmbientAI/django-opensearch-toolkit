@@ -35,6 +35,8 @@ class MigrationLog(Document):
     status = Keyword()
 
     class Index:
+        """Configuration for the index."""
+
         name = ".opensearch_toolkit.migration_log"
         settings = {
             "number_of_shards": 1,
