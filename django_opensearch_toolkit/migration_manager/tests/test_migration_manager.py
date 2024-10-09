@@ -1,6 +1,7 @@
 # pylint: disable=protected-access
 """Unit tests for OpenSearchMigrationsManager."""
 
+from typing import Optional
 from unittest.mock import MagicMock
 
 from opensearchpy.exceptions import ConflictError
@@ -23,7 +24,7 @@ class TestMigration(OpenSearchMigration):
         super().__init__(key=key)
         self.return_value = return_value
         self.should_raise = should_raise
-        self.apply_was_run_with = None
+        self.apply_was_run_with: Optional[str] = None
 
     def serialize(self) -> str:
         """Return a textual description of the migration run to store in the log."""
