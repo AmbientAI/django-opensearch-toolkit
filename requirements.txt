@@ -1,1 +1,2 @@
 django==4.2.14
+opensearch-dsl==2.1.0
