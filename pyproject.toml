@@ -1,0 +1,9 @@
+[tool.black]
+line-length = 110
+
+
+extend-exclude = '''
+(
+	\/migrations\/
+)
+'''
