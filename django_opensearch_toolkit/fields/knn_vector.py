@@ -113,4 +113,4 @@ class KnnVector(Float):
         kwargs["data_type"] = data_type.value
         if method:
             kwargs["method"] = method.to_dict()
-        super(KnnVector, self).__init__(**kwargs)
+        super().__init__(**kwargs)
