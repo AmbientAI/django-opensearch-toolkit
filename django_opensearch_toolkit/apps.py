@@ -1,3 +1,5 @@
+"""App configuration for django-opensearch-toolkit."""
+
 from typing import Any, Dict
 
 from django.apps import AppConfig
