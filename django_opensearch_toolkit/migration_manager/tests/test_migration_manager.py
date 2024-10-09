@@ -1,4 +1,4 @@
-# pylint: disable=(protected-access
+# pylint: disable=protected-access
 """Unit tests for OpenSearchMigrationsManager."""
 
 from unittest.mock import MagicMock
