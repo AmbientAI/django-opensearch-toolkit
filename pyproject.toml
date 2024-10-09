@@ -7,3 +7,16 @@ extend-exclude = '''
 	\/migrations\/
 )
 '''
+
+[[tool.mypy.overrides]]
+module = 'parameterized.*'
+ignore_missing_imports = true
+
+
+[[tool.mypy.overrides]]
+module = 'opensearch_dsl.*'
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = 'elasticmock.*'
+ignore_missing_imports = true
