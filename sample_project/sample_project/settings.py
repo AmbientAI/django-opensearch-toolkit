@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_opensearch_toolkit",
 ]
 
 MIDDLEWARE = [
@@ -121,3 +122,19 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# OpenSearch Clusters
+# Ref: django_openseach_toolkit/apps.py
+# This is passed to opensearch_dsl.connections.connections.configure()
+OPENSEARCH_CLUSTERS = {
+    "default": {
+        "hosts": [
+            {
+                "host": "localhost",
+                "port": 9200,
+            }
+        ],
+        "timeout": 30,
+    },
+}
