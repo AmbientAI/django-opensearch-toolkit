@@ -43,7 +43,7 @@ class KnnVectorMethodName(enum.Enum):
     IVF = "ivf"
 
 
-class kNNVectorSpace(enum.Enum):
+class KnnVectorSpace(enum.Enum):
     """Supported approximate-kNN metric spaces.
 
     Refs:
@@ -57,7 +57,7 @@ class kNNVectorSpace(enum.Enum):
     INNERPRODUCT = "innerproduct"  # Not supported for the LUCENE engine.
 
 
-class kNNVectorEngine(enum.Enum):
+class KnnVectorEngine(enum.Enum):
     """Supported approximate-kNN engines.
 
     Refs:
@@ -78,11 +78,12 @@ class KnnVectorMethod:
     """
 
     name: KnnVectorMethodName
-    space_type: Optional[kNNVectorSpace] = None
-    engine: Optional[kNNVectorEngine] = None
+    space_type: Optional[KnnVectorSpace] = None
+    engine: Optional[KnnVectorEngine] = None
     parameters: Optional[Dict] = None
 
     def to_dict(self) -> Dict:
+        """Represent the method as a dictionary."""
         as_dict: Dict[str, Any] = {}
         as_dict["name"] = self.name.value
         if self.space_type:
@@ -112,4 +113,4 @@ class KnnVector(Float):
         kwargs["data_type"] = data_type.value
         if method:
             kwargs["method"] = method.to_dict()
-        super(KnnVector, self).__init__(**kwargs)
+        super().__init__(**kwargs)

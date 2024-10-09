@@ -96,7 +96,7 @@ class OpenSearchMigrationsManager:
     # Private Methods
 
     def _log(self, message: str):
-        """Custom prefix logger."""
+        """Log message with a custom prefix."""
         _logger.info(f"[{self.__class__.__name__}] {message}")
 
     def _create_migration_logs_index_if_not_exists(self):

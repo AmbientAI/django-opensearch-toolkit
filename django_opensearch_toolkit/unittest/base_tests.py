@@ -26,6 +26,7 @@ class MagicMockOpenSearchBaseTest(TestCase):
     test_client: MagicMock
 
     def setUp(self) -> None:
+        """Set up the test case."""
         super().setUp()
 
         self.connection_name = "unittest-connection"
@@ -56,6 +57,7 @@ class FakeElasticsearchBaseTest(TestCase):
     test_client: FakeElasticsearch
 
     def setUp(self) -> None:
+        """Set up the test case."""
         super().setUp()
 
         self.connection_name = "unittest-connection"

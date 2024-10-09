@@ -1,0 +1,25 @@
+# Workflow for checking linter compliance of Python files.
+name: Python Lint
+
+on: [pull_request]
+
+jobs:
+  lint:
+    name: Python Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - name: Setup Python Environemnt
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.9
+
+      - name: Install Linter Requirements
+        run: |
+          pip install -r requirements_linter.txt
+
+      - name: Run Linters
+        run: |
+          ./run_linter.sh

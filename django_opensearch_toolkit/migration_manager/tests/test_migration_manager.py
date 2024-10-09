@@ -1,3 +1,4 @@
+# pylint: disable=protected-access
 """Unit tests for OpenSearchMigrationsManager."""
 
 from unittest.mock import MagicMock
@@ -36,7 +37,7 @@ class TestMigration(OpenSearchMigration):
         return self.return_value
 
 
-class OpenSearchMigrationsManagerTest_01(FakeElasticsearchBaseTest):
+class OpenSearchMigrationsManagerTest01(FakeElasticsearchBaseTest):
     """Part 1 unit tests for OpenSearchMigrationsManager.
 
     These tests are simpler to write with the FakeElasticsearch mock client.
@@ -193,7 +194,7 @@ class OpenSearchMigrationsManagerTest_01(FakeElasticsearchBaseTest):
             self.manager._run_migration.assert_called_once_with(order=2, migration=migrations[2])
 
 
-class OpenSearchMigrationsManagerTest_02(MagicMockOpenSearchBaseTest):
+class OpenSearchMigrationsManagerTest02(MagicMockOpenSearchBaseTest):
     """Part 2 unit tests for OpenSearchMigrationsManager.
 
     These tests are simpler to write with the MagicMock mock client.
