@@ -17,5 +17,5 @@ jobs:
       - name: Check for Autoformatter Errors
         uses: psf/black@stable
         with:
-          version: "22.10.0"
+          version: "24.8.0"
           options: "--check"

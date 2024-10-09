@@ -6,3 +6,4 @@ ElasticMock==1.8.1
 
 # Testing dependencies
 parameterized==0.9.0
+black==24.8.0
