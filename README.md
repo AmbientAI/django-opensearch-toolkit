@@ -1,6 +1,17 @@
 # django-opensearch-toolkit
 
-A Django app for interacting with OpenSearch clusters, including migrations, search, and unit tests.
+A Django app for interacting with OpenSearch clusters, including connection management, migrations, search, and unit tests.
+
+It is implemented as a thin wrapper over the [opensearch-dsl](https://pypi.org/project/opensearch-dsl/) library for connection management and DSL operations, and benefits from all functionality it provides.
+
+Some key advantages to using this app:
+
+- Maintain connections to multiple clusters
+- Define all cluter settings and schema in code, via migration files
+  - This make it easier to track and replicate these settings across environments (e.g., dev & prod clusters).
+- Run migrations against clusters using Django management commands
+  - Under the hood, it tracks the state of migrations in a hidden index in the cluster itself, similar to what Django does using tables in relational dbs.
+- Write cleaner unit tests with helpful test runners and mocks
 
 ## Quick Start
 
