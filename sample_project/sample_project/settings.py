@@ -32,13 +32,17 @@ ALLOWED_HOSTS: List[str] = []
 # Application definition
 
 INSTALLED_APPS = [
+    # built-in apps
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # the app we are testing
     "django_opensearch_toolkit",
+    # sample app for testing the toolit
+    "sample_app",
 ]
 
 MIDDLEWARE = [
@@ -129,7 +133,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Ref: django_openseach_toolkit/apps.py
 # This is passed to opensearch_dsl.connections.connections.configure()
 OPENSEARCH_CLUSTERS = {
-    "default": {
+    "sample_app": {
         "hosts": [
             {
                 "host": "localhost",
@@ -138,4 +142,13 @@ OPENSEARCH_CLUSTERS = {
         ],
         "timeout": 30,
     },
+}
+
+
+# OpenSearch Migrations
+# cluster_name -> module_path
+#   - Each module should define a variable named MIGRATIONS.
+#   - The module will be dynamically imported and the MIGRATIONS variable will be used.
+OPENSEARCH_MIGRATION_PATHS = {
+    "sample_app": "sample_app.opensearch_migrations",
 }
