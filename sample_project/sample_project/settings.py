@@ -32,13 +32,17 @@ ALLOWED_HOSTS: List[str] = []
 # Application definition
 
 INSTALLED_APPS = [
+    # built-in apps
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # the app we are testing
     "django_opensearch_toolkit",
+    # sample app for testing the toolit
+    "sample_app",
 ]
 
 MIDDLEWARE = [
