@@ -1,1 +1,3 @@
+elasticsearch==7.10.1  # newer versions don't work with ElasticMock
+ElasticMock==1.8.1
 parameterized==0.9.0

@@ -1,4 +1,2 @@
 django==4.2.14
 opensearch-dsl==2.1.0
-elasticsearch==7.10.1  # newer versions don't work with ElasticMock
-ElasticMock==1.8.1
