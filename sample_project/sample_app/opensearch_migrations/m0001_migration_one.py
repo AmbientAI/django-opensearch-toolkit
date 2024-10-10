@@ -6,7 +6,6 @@ from django_opensearch_toolkit.migration_manager import OpenSearchMigration
 
 
 class SampleMigration0001(OpenSearchMigration):
-    """Sample migration #1."""
 
     _KEY = "0001_migration_one"
     _DESCRIPTION = "Sample migration #1"
