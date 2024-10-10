@@ -22,5 +22,5 @@ class SampleMigration0002(OpenSearchMigration):
     def apply(self, connection_name: str) -> bool:
         """Perform the migration."""
         client = connections.get_connection(connection_name)
-        del client  # Use the low-levelclient to execute commands against the cluster
+        del client  # Use the low-level client to execute commands against the cluster
         return True  # return True on success, False on failure
