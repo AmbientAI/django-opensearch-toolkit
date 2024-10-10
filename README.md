@@ -7,7 +7,7 @@ It is implemented as a thin wrapper over the [opensearch-dsl](https://pypi.org/p
 Some key advantages to using this app:
 
 - Maintain connections to multiple clusters
-- Define all cluter settings and schema in code, via migration files
+- Define all cluster settings, ISM policies, and index template mappings in code, via migration files
   - This make it easier to track and replicate these settings across environments (e.g., dev & prod clusters).
 - Run migrations against clusters using Django management commands
   - Under the hood, it tracks the state of migrations in a hidden index in the cluster itself, similar to what Django does using tables in relational dbs.
