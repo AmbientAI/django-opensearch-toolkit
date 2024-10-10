@@ -1,3 +1,4 @@
+#/bin/bash
 set -e
 
 PYTHONPATH=. python sample_project/manage.py check  --fail-level=WARNING
