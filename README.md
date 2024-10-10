@@ -69,7 +69,7 @@ PYTHONPATH=../ python manage.py opensearch_displaymigrations sample_app
 From the project root, run:
 
 ```bash
-./setup.sh                  # Creates a virtual environment in the project directory & downloads all requirments
+./setup.sh                  # Creates a virtual environment in the project directory & downloads all requirements
 source venv/bin/activate    # Step into your virtual environment
 ./run_tests.sh              # Confirm all tests pass
 ./run_linter.sh             # Confirm all static checks pass
