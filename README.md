@@ -57,7 +57,6 @@ NOTE: Currently, we only support a dependency _chain_, instead of a more generic
 5. Display and run your migrations
 
 ```bash
-
 cd sample_project
 PYTHONPATH=../ python manage.py opensearch_displaymigrations sample_app
 PYTHONPATH=../ python manage.py opensearch_runmigrations sample_app
@@ -69,12 +68,13 @@ PYTHONPATH=../ python manage.py opensearch_displaymigrations sample_app
 
 From the project root, run:
 
-```
-./setup.sh       # Creates a virtual environment in the project directory & downloads all requirments
-source venv/bin/activate  # Step into your virtual environment
-./run_tests.sh   # Confirm all tests pass
-./run_linter.sh  # Confirm all static checks pass
-deactivate       # Leave your virtual environment
+```bash
+./setup.sh                  # Creates a virtual environment in the project directory & downloads all requirments
+source venv/bin/activate    # Step into your virtual environment
+./run_tests.sh              # Confirm all tests pass
+./run_linter.sh             # Confirm all static checks pass
+./run_integration_tests.sh  # Run an integration test (requires docker daemon to be running)
+deactivate                  # Leave your virtual environment
 ```
 
 NOTE: As of writing, the `bdist_wheel` command of ElasticMock fails on install. This doesn't impact the tests though.
