@@ -2,7 +2,7 @@
 
 A Django app for interacting with OpenSearch clusters, including connection management, migrations, search, and unit tests.
 
-It is implemented as a thin wrapper over the [opensearch-dsl](https://pypi.org/project/opensearch-dsl/) library for connection management and DSL operations, and benefits from all functionality it provides.
+It is implemented as a thin wrapper over the [opensearch-py](https://pypi.org/project/opensearch-py/) library for connection management and DSL operations, and benefits from all functionality it provides. The only other dependency is Django itself.
 
 Some key advantages to using this app:
 
@@ -26,8 +26,6 @@ INSTALLED_APPS = [
     ...
 ]
 ```
-
-NOTE: make sure it is discoverable via the `PYTHONPATH`.
 
 2. Define the clusters to configure:
 
@@ -69,10 +67,10 @@ NOTE: Currently, we only support a dependency _chain_, instead of a more generic
 
 ```bash
 cd sample_project
-PYTHONPATH=../ python manage.py opensearch_displaymigrations sample_app
-PYTHONPATH=../ python manage.py opensearch_runmigrations sample_app
-PYTHONPATH=../ python manage.py opensearch_runmigrations sample_app --nodry
-PYTHONPATH=../ python manage.py opensearch_displaymigrations sample_app
+python manage.py opensearch_displaymigrations sample_app
+python manage.py opensearch_runmigrations sample_app
+python manage.py opensearch_runmigrations sample_app --nodry
+python manage.py opensearch_displaymigrations sample_app
 ```
 
 ## Local Development
@@ -87,5 +85,3 @@ source venv/bin/activate    # Step into your virtual environment
 ./run_integration_tests.sh  # Run an integration test (requires docker daemon to be running)
 deactivate                  # Leave your virtual environment
 ```
-
-NOTE: As of writing, the `bdist_wheel` command of ElasticMock fails on install. This doesn't impact the tests though.
