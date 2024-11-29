@@ -1,4 +1,3 @@
-# pylint: disable=protected-access
 """Unit tests for OpenSearchMigrationsManager."""
 
 from typing import Optional
@@ -7,13 +6,13 @@ from unittest.mock import MagicMock
 from opensearchpy.exceptions import ConflictError
 import parameterized as paramt
 
-from django_opensearch_toolkit.migration_manager.opensearch_migration import OpenSearchMigration
 from django_opensearch_toolkit.migration_manager.migration_log import MigrationLog, MigrationLogStatus
 from django_opensearch_toolkit.migration_manager.migration_manager import OpenSearchMigrationsManager
+from django_opensearch_toolkit.migration_manager.opensearch_migration import OpenSearchMigration
 from django_opensearch_toolkit.unittest import FakeOpenSearchTestCase, MagicMockOpenSearchTestCase
 
 
-class TestMigration(OpenSearchMigration):
+class SampleMigration(OpenSearchMigration):
     """Migraton for unit test."""
 
     _KEY = "0001_test_migration"
@@ -147,7 +146,7 @@ class OpenSearchMigrationsManagerTest01(FakeOpenSearchTestCase):
 
         self.manager._run_migration = MagicMock()
         migrations = [
-            TestMigration(True, False),  # key doesn't match what's in the log
+            SampleMigration(True, False),  # key doesn't match what's in the log
         ]
         self.manager.run_migrations(migrations)
 
@@ -182,10 +181,10 @@ class OpenSearchMigrationsManagerTest01(FakeOpenSearchTestCase):
         self.manager._run_migration = MagicMock()
         migrations = [
             # these were already applied
-            TestMigration(True, False, key="id_0001"),
-            TestMigration(True, False, key="id_0002"),
+            SampleMigration(True, False, key="id_0001"),
+            SampleMigration(True, False, key="id_0002"),
             # this needs to be applied
-            TestMigration(True, False, key="id_0003"),
+            SampleMigration(True, False, key="id_0003"),
         ]
         self.manager.run_migrations(migrations, dry=dry)
 
@@ -277,7 +276,7 @@ class OpenSearchMigrationsManagerTest02(MagicMockOpenSearchTestCase):
     def test_run_migration(self, return_value: bool, should_raise: bool):
         """Test the _run_migration() method."""
         order = 12
-        migration = TestMigration(return_value=return_value, should_raise=should_raise)
+        migration = SampleMigration(return_value=return_value, should_raise=should_raise)
 
         # Mock the resposes of the ES Client
         self.test_client.create.return_value = {"result": "created"}
