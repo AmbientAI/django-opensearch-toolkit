@@ -23,6 +23,8 @@ class MagicMockOpenSearchBaseTest(TestCase):
     # By default, assume Django-managed DBs are not needed to speed up the test
     # runner. Derived classes should override this if that is not the case.
     databases: Set[str] = set()
+
+    connection_name: str
     test_client: MagicMock
 
     def setUp(self) -> None:
@@ -31,8 +33,6 @@ class MagicMockOpenSearchBaseTest(TestCase):
 
         self.connection_name = "unittest-connection"
 
-        # The opensearchpy.connections module imports the OpenSearch client
-        # by name, so we need to patch it this way
         with patch("opensearchpy.OpenSearch", MagicMock):
             connections.create_connection(alias=self.connection_name, hosts=["fake-host"])
 
@@ -54,6 +54,8 @@ class FakeOpenSearchBaseTest(TestCase):
     # By default, assume Django-managed DBs are not needed to speed up the test
     # runner. Derived classes should override this if that is not the case.
     databases: Set[str] = set()
+
+    connection_name: str
     test_client: FakeOpenSearch
 
     def setUp(self) -> None:
@@ -62,8 +64,6 @@ class FakeOpenSearchBaseTest(TestCase):
 
         self.connection_name = "unittest-connection"
 
-        # The opensearchpy.connections module imports the OpenSearch
-        # by name, so we need to patch it this way
         with patch("opensearchpy.OpenSearch", FakeOpenSearch):
             connections.create_connection(alias=self.connection_name, hosts=["fake-host"])
 

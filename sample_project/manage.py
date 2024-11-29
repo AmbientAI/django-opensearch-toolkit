@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# pylint: disable=import-outside-toplevel
 """Django's command-line utility for administrative tasks."""
 import logging
 import os
