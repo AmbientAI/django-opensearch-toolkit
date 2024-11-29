@@ -1,3 +1,4 @@
 django==4.2.14
+django-stubs==4.2.7
 opensearch-dsl==2.1.0
 openmock==2.2.0
