@@ -2,7 +2,7 @@
 
 from logging import getLogger
 import time
-from typing import List
+from typing import List, Sequence
 
 from opensearchpy.connection import connections
 from opensearchpy.exceptions import ConflictError, NotFoundError
@@ -39,7 +39,7 @@ class OpenSearchMigrationsManager:
         self._create_migration_logs_index_if_not_exists()
         self._get_and_display_all_migration_logs()
 
-    def run_migrations(self, migrations: List[OpenSearchMigration], dry: bool = True):
+    def run_migrations(self, migrations: Sequence[OpenSearchMigration], dry: bool = True):
         """Apply all migrations, skipping those that were already applied.
 
         Will abort on any faillure or any inconsistency in the migration log.

@@ -127,7 +127,7 @@ class OpenSearchMigrationsManagerTest01(FakeOpenSearchTestCase):
         )
         self.assertEqual(len(self.manager._get_all_migration_logs()), 1)
 
-        self.manager._run_migration = MagicMock()
+        self.manager._run_migration = MagicMock()  # type: ignore[method-assign]
         self.manager.run_migrations([])
 
         # We abort before running any migrations
@@ -145,7 +145,7 @@ class OpenSearchMigrationsManagerTest01(FakeOpenSearchTestCase):
         )
         self.assertEqual(len(self.manager._get_all_migration_logs()), 1)
 
-        self.manager._run_migration = MagicMock()
+        self.manager._run_migration = MagicMock()  # type: ignore[method-assign]
         migrations = [
             SampleMigration(True, False),  # key doesn't match what's in the log
         ]
@@ -179,7 +179,7 @@ class OpenSearchMigrationsManagerTest01(FakeOpenSearchTestCase):
         )
         self.assertEqual(len(self.manager._get_all_migration_logs()), 2)
 
-        self.manager._run_migration = MagicMock()
+        self.manager._run_migration = MagicMock()  # type: ignore[method-assign]
         migrations = [
             # these were already applied
             SampleMigration(True, False, key="id_0001"),
