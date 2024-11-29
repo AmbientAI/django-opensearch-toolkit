@@ -5,6 +5,6 @@ the same way Django runs tests against a local DB, but using a separate db names
 """
 
 from .base_tests import (
-    FakeElasticsearchBaseTest,
+    FakeOpenSearchBaseTest,
     MagicMockOpenSearchBaseTest,
 )

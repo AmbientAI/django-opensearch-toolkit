@@ -4,7 +4,7 @@ from typing import Set
 from unittest.mock import patch, MagicMock
 
 from django.test import TestCase
-from elasticmock import FakeElasticsearch
+from openmock import FakeOpenSearch
 from opensearch_dsl import connections
 
 
@@ -39,8 +39,8 @@ class MagicMockOpenSearchBaseTest(TestCase):
         self.test_client = connections.get_connection(alias=self.connection_name)
 
 
-class FakeElasticsearchBaseTest(TestCase):
-    """Base class using elasticmock.FakeElasticsearch as the mock client.
+class FakeOpenSearchBaseTest(TestCase):
+    """Base class using openmock.FakeOpenSearch as the mock client.
 
     WARNING: this mock client does not implement all the behavior of a real
     ES client. E.g., search() just returns all docs in the index.
@@ -54,7 +54,7 @@ class FakeElasticsearchBaseTest(TestCase):
     # By default, assume Django-managed DBs are not needed to speed up the test
     # runner. Derived classes should override this if that is not the case.
     databases: Set[str] = set()
-    test_client: FakeElasticsearch
+    test_client: FakeOpenSearch
 
     def setUp(self) -> None:
         """Set up the test case."""
@@ -64,7 +64,7 @@ class FakeElasticsearchBaseTest(TestCase):
 
         # The opensearch_dsl.connections module imports the OpenSearch
         # by name, so we need to patch it this way
-        with patch("opensearch_dsl.connections.OpenSearch", FakeElasticsearch):
+        with patch("opensearch_dsl.connections.OpenSearch", FakeOpenSearch):
             connections.create_connection(alias=self.connection_name, hosts=["fake-host"])
 
         self.test_client = connections.get_connection(alias=self.connection_name)

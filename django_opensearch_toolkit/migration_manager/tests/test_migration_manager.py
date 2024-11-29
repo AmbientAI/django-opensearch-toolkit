@@ -10,7 +10,7 @@ import parameterized as paramt
 from django_opensearch_toolkit.migration_manager.opensearch_migration import OpenSearchMigration
 from django_opensearch_toolkit.migration_manager.migration_log import MigrationLog, MigrationLogStatus
 from django_opensearch_toolkit.migration_manager.migration_manager import OpenSearchMigrationsManager
-from django_opensearch_toolkit.unittest import FakeElasticsearchBaseTest, MagicMockOpenSearchBaseTest
+from django_opensearch_toolkit.unittest import FakeOpenSearchBaseTest, MagicMockOpenSearchBaseTest
 
 
 class TestMigration(OpenSearchMigration):
@@ -38,10 +38,10 @@ class TestMigration(OpenSearchMigration):
         return self.return_value
 
 
-class OpenSearchMigrationsManagerTest01(FakeElasticsearchBaseTest):
+class OpenSearchMigrationsManagerTest01(FakeOpenSearchBaseTest):
     """Part 1 unit tests for OpenSearchMigrationsManager.
 
-    These tests are simpler to write with the FakeElasticsearch mock client.
+    These tests are simpler to write with the FakeOpenSearch mock client.
     """
 
     def setUp(self):
