@@ -4,7 +4,7 @@ from typing import Any, Dict
 
 from django.apps import AppConfig
 from django.conf import settings
-from opensearch_dsl.connections import connections as opensearch_connections
+from opensearchpy.connection import connections as opensearch_connections
 
 
 _OpenSearchClusterName = str

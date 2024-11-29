@@ -336,6 +336,7 @@ class OpenSearchMigrationsManagerTest02(MagicMockOpenSearchBaseTest):
                     },
                 },
                 "refresh": False,
+                "retry_on_conflict": 0,
             },
         )
 

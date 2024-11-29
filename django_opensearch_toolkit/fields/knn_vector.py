@@ -22,7 +22,7 @@ import dataclasses
 import enum
 from typing import Any, Dict, Optional
 
-from opensearch_dsl import Float
+from opensearchpy.helpers.field import Float
 
 
 class KnnVectorDataType(enum.Enum):

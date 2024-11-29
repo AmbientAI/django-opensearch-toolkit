@@ -2,8 +2,8 @@
 
 from typing import List, Union
 
-from opensearch_dsl.response import AggResponse
-from opensearch_dsl.response.aggs import FieldBucket
+from opensearchpy.helpers.response import AggResponse
+from opensearchpy.helpers.response.aggs import FieldBucket
 
 
 def get_aggregation_buckets(agg_or_sub_agg: Union[AggResponse, FieldBucket], key: str) -> List[FieldBucket]:

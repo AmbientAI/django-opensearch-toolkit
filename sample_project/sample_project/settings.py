@@ -131,7 +131,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # OpenSearch Clusters
 # Ref: django_openseach_toolkit/apps.py
-# This is passed to opensearch_dsl.connections.connections.configure()
+# This is passed to opensearchpy.connection.connections.configure()
 OPENSEARCH_CLUSTERS = {
     "sample_app": {
         "hosts": [

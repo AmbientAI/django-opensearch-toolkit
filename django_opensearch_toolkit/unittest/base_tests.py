@@ -5,7 +5,7 @@ from unittest.mock import patch, MagicMock
 
 from django.test import TestCase
 from openmock import FakeOpenSearch
-from opensearch_dsl import connections
+from opensearchpy.connection import connections
 
 
 class MagicMockOpenSearchBaseTest(TestCase):
@@ -31,9 +31,9 @@ class MagicMockOpenSearchBaseTest(TestCase):
 
         self.connection_name = "unittest-connection"
 
-        # The opensearch_dsl.connections module imports the OpenSearch client
+        # The opensearchpy.connections module imports the OpenSearch client
         # by name, so we need to patch it this way
-        with patch("opensearch_dsl.connections.OpenSearch", MagicMock):
+        with patch("opensearchpy.OpenSearch", MagicMock):
             connections.create_connection(alias=self.connection_name, hosts=["fake-host"])
 
         self.test_client = connections.get_connection(alias=self.connection_name)
@@ -62,9 +62,9 @@ class FakeOpenSearchBaseTest(TestCase):
 
         self.connection_name = "unittest-connection"
 
-        # The opensearch_dsl.connections module imports the OpenSearch
+        # The opensearchpy.connections module imports the OpenSearch
         # by name, so we need to patch it this way
-        with patch("opensearch_dsl.connections.OpenSearch", FakeOpenSearch):
+        with patch("opensearchpy.OpenSearch", FakeOpenSearch):
             connections.create_connection(alias=self.connection_name, hosts=["fake-host"])
 
         self.test_client = connections.get_connection(alias=self.connection_name)

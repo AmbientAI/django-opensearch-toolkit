@@ -4,9 +4,9 @@ from logging import getLogger
 import time
 from typing import List
 
+from opensearchpy.connection import connections
 from opensearchpy.exceptions import ConflictError, NotFoundError
-from opensearch_dsl import Index
-from opensearch_dsl.connections import connections
+from opensearchpy.helpers.index import Index
 
 from django_opensearch_toolkit.migration_manager.migration_log import MigrationLog, MigrationLogStatus
 from django_opensearch_toolkit.migration_manager.opensearch_migration import OpenSearchMigration

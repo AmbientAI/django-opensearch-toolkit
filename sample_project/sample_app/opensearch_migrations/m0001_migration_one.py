@@ -1,6 +1,6 @@
 """Sample migration #1."""
 
-from opensearch_dsl.connections import connections
+from opensearchpy.connection import connections
 
 from django_opensearch_toolkit.migration_manager import OpenSearchMigration
 

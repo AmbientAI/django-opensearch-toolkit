@@ -8,7 +8,8 @@ against that system, with each row being a seprate migration.
 
 import enum
 
-from opensearch_dsl import Date, Document, Keyword, Integer, Text
+from opensearchpy.helpers.field import Date, Keyword, Integer, Text
+from opensearchpy.helpers.document import Document
 
 
 class MigrationLogStatus(enum.Enum):
