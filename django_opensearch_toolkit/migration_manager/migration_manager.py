@@ -18,7 +18,7 @@ _logger = getLogger(__name__)
 class OpenSearchMigrationsManager:
     """Utility class for managing the state of migrations against an OpenSearch cluster."""
 
-    def __init__(self, connection_name: str, max_migrations_to_fetch: int = 1000):
+    def __init__(self, connection_name: str, max_migrations_to_fetch: int = 5_000):
         """Initialize the manager.
 
         NOTE: this implementation will fetch all migration logs in one shot and
@@ -29,7 +29,7 @@ class OpenSearchMigrationsManager:
         """
         self.connection_name = connection_name
         self.max_migrations_to_fetch = max_migrations_to_fetch
-        self.migration_log_index = Index(MigrationLog.Index.name, using=self.connection_name)
+        self.migration_log_index = Index(name=MigrationLog.Index.name, using=self.connection_name)
         self.client = connections.get_connection(self.connection_name)  # low-level client
 
     # Public Methods
@@ -138,7 +138,7 @@ class OpenSearchMigrationsManager:
         """Try to create the log as a document in the migrations_log index, and fail if it exists.
 
         We have this helper because MigrationLog.save() uses the `index` API instead
-        of the `create` API. opensearch-dsl does not expose access to the latter
+        of the `create` API. The Document helper does not expose access to the latter
         API, so we use the low-level client here.
         """
         # Try to create it

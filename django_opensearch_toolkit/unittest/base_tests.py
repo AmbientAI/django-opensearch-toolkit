@@ -19,7 +19,7 @@ class MagicMockOpenSearchTestCase(TestCase):
 
     Derived classes can access the mock OpenSearch client either:
       - Directly via self.test_client
-      - Indirectly by using opensearch-dsl and self.connection_name. This
+      - Indirectly by using opensearchpy.helpers and self.connection_name. This
         will resolve to the same low-level OpenSearch client.
     """
 
@@ -50,7 +50,7 @@ class FakeOpenSearchTestCase(TestCase):
 
     Derived classes can access the mock ES client either:
       - Directly via self.test_client
-      - Indirectly by using opensearch-dsl and self.connection_name. This
+      - Indirectly by using opensearchpy.helpers and self.connection_name. This
         will resolve to the same low-level OpenSearch client.
     """
 
