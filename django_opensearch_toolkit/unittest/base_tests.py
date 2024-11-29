@@ -8,7 +8,10 @@ from openmock import FakeOpenSearch
 from opensearchpy.connection import connections
 
 
-class MagicMockOpenSearchBaseTest(TestCase):
+_PATCH_TARGET = "opensearchpy.OpenSearch"
+
+
+class MagicMockOpenSearchTestCase(TestCase):
     """Base class using Python's built-in MagicMock as the mock client.
 
     Derived classes should implement return_value and side_effect behavior
@@ -33,13 +36,13 @@ class MagicMockOpenSearchBaseTest(TestCase):
 
         self.connection_name = "unittest-connection"
 
-        with patch("opensearchpy.OpenSearch", MagicMock):
+        with patch(_PATCH_TARGET, MagicMock):
             connections.create_connection(alias=self.connection_name, hosts=["fake-host"])
 
         self.test_client = connections.get_connection(alias=self.connection_name)
 
 
-class FakeOpenSearchBaseTest(TestCase):
+class FakeOpenSearchTestCase(TestCase):
     """Base class using openmock.FakeOpenSearch as the mock client.
 
     WARNING: this mock client does not implement all the behavior of a real
@@ -64,7 +67,7 @@ class FakeOpenSearchBaseTest(TestCase):
 
         self.connection_name = "unittest-connection"
 
-        with patch("opensearchpy.OpenSearch", FakeOpenSearch):
+        with patch(_PATCH_TARGET, FakeOpenSearch):
             connections.create_connection(alias=self.connection_name, hosts=["fake-host"])
 
         self.test_client = connections.get_connection(alias=self.connection_name)

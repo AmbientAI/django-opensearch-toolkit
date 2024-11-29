@@ -10,7 +10,7 @@ import parameterized as paramt
 from django_opensearch_toolkit.migration_manager.opensearch_migration import OpenSearchMigration
 from django_opensearch_toolkit.migration_manager.migration_log import MigrationLog, MigrationLogStatus
 from django_opensearch_toolkit.migration_manager.migration_manager import OpenSearchMigrationsManager
-from django_opensearch_toolkit.unittest import FakeOpenSearchBaseTest, MagicMockOpenSearchBaseTest
+from django_opensearch_toolkit.unittest import FakeOpenSearchTestCase, MagicMockOpenSearchTestCase
 
 
 class TestMigration(OpenSearchMigration):
@@ -38,7 +38,7 @@ class TestMigration(OpenSearchMigration):
         return self.return_value
 
 
-class OpenSearchMigrationsManagerTest01(FakeOpenSearchBaseTest):
+class OpenSearchMigrationsManagerTest01(FakeOpenSearchTestCase):
     """Part 1 unit tests for OpenSearchMigrationsManager.
 
     These tests are simpler to write with the FakeOpenSearch mock client.
@@ -195,7 +195,7 @@ class OpenSearchMigrationsManagerTest01(FakeOpenSearchBaseTest):
             self.manager._run_migration.assert_called_once_with(order=2, migration=migrations[2])
 
 
-class OpenSearchMigrationsManagerTest02(MagicMockOpenSearchBaseTest):
+class OpenSearchMigrationsManagerTest02(MagicMockOpenSearchTestCase):
     """Part 2 unit tests for OpenSearchMigrationsManager.
 
     These tests are simpler to write with the MagicMock mock client.
