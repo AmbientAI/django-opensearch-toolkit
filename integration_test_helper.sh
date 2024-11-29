@@ -93,6 +93,11 @@ _run_migrations() {
 }
 
 
+_display_migrations() {
+    PYTHONPATH=. python sample_project/manage.py opensearch_displaymigrations sample_app
+}
+
+
 case "$MODE" in
     start)
         _download_docker_image
@@ -101,6 +106,8 @@ case "$MODE" in
         ;;
     check)
         _run_migrations
+        sleep 1
+        _display_migrations
         ;;
     stop)
         _stop_docker_container
