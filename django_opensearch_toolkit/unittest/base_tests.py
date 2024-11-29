@@ -46,9 +46,9 @@ class FakeOpenSearchTestCase(TestCase):
     """Base class using openmock.FakeOpenSearch as the mock client.
 
     WARNING: this mock client does not implement all the behavior of a real
-    ES client. E.g., search() just returns all docs in the index.
+    OpenSearch client. E.g., search() just returns all docs in the index.
 
-    Derived classes can access the mock ES client either:
+    Derived classes can access the mock OpenSearch client either:
       - Directly via self.test_client
       - Indirectly by using opensearchpy.helpers and self.connection_name. This
         will resolve to the same low-level OpenSearch client.
