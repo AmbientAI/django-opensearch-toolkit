@@ -8,8 +8,8 @@ against that system, with each row being a seprate migration.
 
 import enum
 
-from opensearchpy.helpers.field import Date, Keyword, Integer, Text
 from opensearchpy.helpers.document import Document
+from opensearchpy.helpers.field import Date, Keyword, Integer, Text
 
 
 class MigrationLogStatus(enum.Enum):
@@ -45,7 +45,7 @@ class MigrationLog(Document):
             "hidden": True,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Initialize the document."""
         super().__init__(*args, **kwargs)
         self.__dict__["meta"]["id"] = self.key  # set the document_id for unique lookup
