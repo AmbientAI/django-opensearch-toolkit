@@ -135,7 +135,7 @@ class OpenSearchMigrationsManager:
         return existing_migration_logs
 
     def _create_migration_log_atomic(self, log: MigrationLog) -> bool:
-        """Try to create the log as a document in the migrations_log index, and fail if it exists.
+        """Try to create the log as a document in the migration_log_index, and fail if it exists.
 
         We have this helper because MigrationLog.save() uses the `index` API instead
         of the `create` API. The Document helper does not expose access to the latter
@@ -178,10 +178,10 @@ class OpenSearchMigrationsManager:
         """Apply a migration using write-ahead logging and terminal log updates."""
         started_at = int(1000 * time.time())
 
-        def _log_progress(message: str):
+        def _print_progress(message: str):
             self._log(f"[key={migration.get_key()}] {message}")
 
-        _log_progress("[1/4] Creating migration log")
+        _print_progress("[1/4] Creating migration log")
         log = MigrationLog(
             order=order,
             key=migration.get_key(),
@@ -195,16 +195,16 @@ class OpenSearchMigrationsManager:
             self._log("Failed to create migration log")
             return False
 
-        _log_progress("[2/4] Applying migration operation")
+        _print_progress("[2/4] Applying migration operation")
         success = False
         try:
             success = migration.apply(self.connection_name)
-        except Exception:  # pylint: disable=broad-except
+        except Exception:
             _logger.exception("Failed to apply migration")
         ended_at = int(1000 * time.time())
         new_status = MigrationLogStatus.SUCCEEDED.value if success else MigrationLogStatus.FAILED.value
 
-        _log_progress(f"[3/4] Migration {new_status.lower()}; updating migration log")
+        _print_progress(f"[3/4] Migration {new_status.lower()}; updating migration log")
         result = log.update(
             using=self.connection_name,
             # updated fields:
@@ -216,5 +216,5 @@ class OpenSearchMigrationsManager:
             return False
         self.migration_log_index.flush()
 
-        _log_progress("[4/4] Done")
+        _print_progress("[4/4] Done")
         return success
