@@ -18,7 +18,7 @@ _logger = getLogger(__name__)
 class OpenSearchMigrationsManager:
     """Utility class for managing the state of migrations against an OpenSearch cluster."""
 
-    def __init__(self, connection_name: str, max_migrations_to_fetch: int = 5_000):
+    def __init__(self, connection_name: str, max_migrations_to_fetch: int = 5_000) -> None:
         """Initialize the manager.
 
         NOTE: this implementation will fetch all migration logs in one shot and
@@ -34,12 +34,12 @@ class OpenSearchMigrationsManager:
 
     # Public Methods
 
-    def display_migrations(self):
+    def display_migrations(self) -> None:
         """Display the migration log history."""
         self._create_migration_logs_index_if_not_exists()
         self._get_and_display_all_migration_logs()
 
-    def run_migrations(self, migrations: Sequence[OpenSearchMigration], dry: bool = True):
+    def run_migrations(self, migrations: Sequence[OpenSearchMigration], dry: bool = True) -> None:
         """Apply all migrations, skipping those that were already applied.
 
         Will abort on any faillure or any inconsistency in the migration log.
@@ -95,23 +95,23 @@ class OpenSearchMigrationsManager:
 
     # Private Methods
 
-    def _log(self, message: str):
+    def _log(self, message: str) -> None:
         """Log message with a custom prefix."""
         _logger.info(f"[{self.__class__.__name__}] {message}")
 
-    def _create_migration_logs_index_if_not_exists(self):
+    def _create_migration_logs_index_if_not_exists(self) -> None:
         """Create the index that tracks the migration logs."""
         if not self.migration_log_index.exists():
             self._log("Creating migration logs index")
             MigrationLog.init(using=self.connection_name)
 
-    def _delete_migration_logs_index_if_exists(self):
+    def _delete_migration_logs_index_if_exists(self) -> None:
         """Delete the index that tracks the migration logs."""
         if self.migration_log_index.exists():
             self._log("Deleting migration logs index")
             self.migration_log_index.delete()
 
-    def _print_migration_logs(self, migration_logs: List[MigrationLog]):
+    def _print_migration_logs(self, migration_logs: List[MigrationLog]) -> None:
         """Pretty-print the provided migration logs."""
         for log in migration_logs:
             self._log(
@@ -178,7 +178,7 @@ class OpenSearchMigrationsManager:
         """Apply a migration using write-ahead logging and terminal log updates."""
         started_at = int(1000 * time.time())
 
-        def _print_progress(message: str):
+        def _print_progress(message: str) -> None:
             self._log(f"[key={migration.get_key()}] {message}")
 
         _print_progress("[1/4] Creating migration log")

@@ -8,7 +8,7 @@ import sys
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s")
 
 
-def main():
+def main() -> None:
     """Run administrative tasks."""
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sample_project.settings")
     try:

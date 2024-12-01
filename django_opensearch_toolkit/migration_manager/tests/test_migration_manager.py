@@ -18,7 +18,7 @@ class SampleMigration(OpenSearchMigration):
     _KEY = "0001_test_migration"
     _DESCRIPTION = "This is a test migration"
 
-    def __init__(self, return_value: bool, should_raise: bool, key: str = _KEY):
+    def __init__(self, return_value: bool, should_raise: bool, key: str = _KEY) -> None:
         """Initialize the migration."""
         super().__init__(key=key)
         self.return_value = return_value
@@ -68,7 +68,7 @@ class OpenSearchMigrationsManagerTest01(FakeOpenSearchTestCase):
             body=log.to_dict(include_meta=False),
         )
 
-    def test_get_all_migration_logs(self):
+    def test_get_all_migration_logs(self) -> None:
         """Test _get_all_migration_logs() and _get_and_display_all_migration_logs()."""
         self.manager._create_migration_logs_index_if_not_exists()
 

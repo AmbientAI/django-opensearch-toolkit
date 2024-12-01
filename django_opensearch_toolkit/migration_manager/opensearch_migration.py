@@ -11,7 +11,7 @@ class OpenSearchMigration(abc.ABC):
     performed in the apply() method using the supplied connection_name.
     """
 
-    def __init__(self, key: str):
+    def __init__(self, key: str) -> None:
         """Initialize the migration."""
         self._key = key
 
