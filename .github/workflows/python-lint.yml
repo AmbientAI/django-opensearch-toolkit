@@ -16,10 +16,10 @@ jobs:
         with:
           python-version: 3.9
 
-      - name: Install Linter Requirements
+      - name: Install Requirements
         run: |
           pip install -r requirements.txt
-          pip install -r requirements_linter.txt
+          pip install -r requirements_dev.txt
 
       - name: Run Linters
         run: |
