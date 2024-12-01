@@ -1,6 +1,6 @@
 """Unit tests for OpenSearchMigrationsManager."""
 
-from typing import Optional
+from typing import List, Optional
 from unittest.mock import MagicMock
 
 from opensearchpy.exceptions import ConflictError
@@ -45,7 +45,8 @@ class OpenSearchMigrationsManagerTest01(FakeOpenSearchTestCase):
 
     def setUp(self) -> None:
         super().setUp()
-        self.manager = OpenSearchMigrationsManager(connection_name=self.connection_name)
+        self.manager = OpenSearchMigrationsManager(connection_name=self.unittest_connection)
+        self.test_client = self.get_test_client(self.unittest_connection)
         self.assertEqual(self.manager.client, self.test_client)
 
     def test_index_management(self) -> None:
@@ -203,7 +204,8 @@ class OpenSearchMigrationsManagerTest02(MagicMockOpenSearchTestCase):
 
     def setUp(self) -> None:
         super().setUp()
-        self.manager = OpenSearchMigrationsManager(connection_name=self.connection_name)
+        self.manager = OpenSearchMigrationsManager(connection_name=self.unittest_connection)
+        self.test_client = self.get_test_client(self.unittest_connection)
         self.assertEqual(self.manager.client, self.test_client)
         self.test_client.reset_mock()
 
@@ -297,7 +299,7 @@ class OpenSearchMigrationsManagerTest02(MagicMockOpenSearchTestCase):
             MigrationLogStatus.SUCCEEDED.value if should_succeed else MigrationLogStatus.FAILED.value
         )
         self.assertEqual(success, should_succeed)
-        self.assertEqual(migration.apply_was_run_with, self.connection_name)
+        self.assertEqual(migration.apply_was_run_with, self.unittest_connection)
 
         # Check that the migration log was initially created
         create_kwargs = self.test_client.create.mock_calls[0].kwargs

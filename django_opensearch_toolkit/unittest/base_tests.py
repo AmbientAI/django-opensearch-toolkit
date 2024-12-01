@@ -16,6 +16,8 @@ class _OpenSearchTestCase(TestCase, abc.ABC):
     # runner. Derived classes should override this if that is not the case.
     databases: Set[str] = set()
 
+    unittest_connection: str
+
     def connections_to_patch(self) -> List[str]:
         """Return a list of OpenSearch connection aliases to patch."""
         return []
@@ -35,8 +37,13 @@ class _OpenSearchTestCase(TestCase, abc.ABC):
             self._original_connections[conn_alias] = connections.get_connection(alias=conn_alias)
             connections.add_connection(conn_alias, self.create_test_client())
 
+        self.unittest_connection = "unittest"
+        connections.add_connection(self.unittest_connection, self.create_test_client())
+
     def tearDown(self) -> None:
         """Tear down the test case."""
+        connections.remove_connection(self.unittest_connection)
+
         for conn_alias in self.connections_to_patch():
             connections.add_connection(conn_alias, self._original_connections[conn_alias])
 
