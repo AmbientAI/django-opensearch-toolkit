@@ -1,27 +1,16 @@
 """Base classes for unittests requiring a mock OpenSearch client."""
 
-from typing import List, Set
-from unittest.mock import patch, MagicMock
+import abc
+from typing import Any, List, Set
+from unittest.mock import MagicMock
 
 from django.test import TestCase
 from openmock import FakeOpenSearch
 from opensearchpy.connection import connections
 
 
-_PATCH_TARGET = "opensearchpy.OpenSearch"
-
-
-class MagicMockOpenSearchTestCase(TestCase):
-    """Base class using Python's built-in MagicMock as the mock client.
-
-    Derived classes should implement return_value and side_effect behavior
-    on the mock's methods, and inspect the call values.
-
-    Derived classes can access the mock OpenSearch client either:
-      - Directly via self.test_client
-      - Indirectly by using opensearchpy.helpers and self.connection_name. This
-        will resolve to the same low-level OpenSearch client.
-    """
+class _OpenSearchTestCase(TestCase, abc.ABC):
+    """Base class for OpenSearch test cases."""
 
     # By default, assume Django-managed DBs are not needed to speed up the test
     # runner. Derived classes should override this if that is not the case.
@@ -29,6 +18,11 @@ class MagicMockOpenSearchTestCase(TestCase):
 
     def connections_to_patch(self) -> List[str]:
         return []
+
+    @abc.abstractmethod
+    def create_test_client(self) -> Any:
+        """Create a mock OpenSearch client."""
+        ...
 
     def setUp(self) -> None:
         """Set up the test case."""
@@ -38,7 +32,7 @@ class MagicMockOpenSearchTestCase(TestCase):
 
         for conn_alias in self.connections_to_patch():
             self._original_connections[conn_alias] = connections.get_connection(alias=conn_alias)
-            connections.add_connection(conn_alias, MagicMock())
+            connections.add_connection(conn_alias, self.create_test_client())
 
     def tearDown(self) -> None:
         """Tear down the test case."""
@@ -49,43 +43,28 @@ class MagicMockOpenSearchTestCase(TestCase):
 
     def get_test_client(self, connection_name: str) -> MagicMock:
         """Get the mock OpenSearch client for the given connection name."""
-        conn = connections.get_connection(alias=connection_name)
-        assert isinstance(conn, MagicMock)
-        return conn
+        return connections.get_connection(alias=connection_name)
 
 
-class FakeOpenSearchTestCase(TestCase):
+class MagicMockOpenSearchTestCase(_OpenSearchTestCase):
+    """Base class using Python's built-in MagicMock as the mock client.
+
+    Derived classes should implement return_value and side_effect behavior
+    on the mock's methods, and inspect the call values.
+    """
+
+    def create_test_client(self) -> Any:
+        """Create a mock OpenSearch client."""
+        return MagicMock()
+
+
+class FakeOpenSearchTestCase(_OpenSearchTestCase):
     """Base class using openmock.FakeOpenSearch as the mock client.
 
     WARNING: this mock client does not implement all the behavior of a real
     OpenSearch client. E.g., search() just returns all docs in the index.
-
-    Derived classes can access the mock OpenSearch client either:
-      - Directly via self.test_client
-      - Indirectly by using opensearchpy.helpers and self.connection_name. This
-        will resolve to the same low-level OpenSearch client.
     """
 
-    # By default, assume Django-managed DBs are not needed to speed up the test
-    # runner. Derived classes should override this if that is not the case.
-    databases: Set[str] = set()
-
-    connection_name: str
-    test_client: FakeOpenSearch
-
-    def setUp(self) -> None:
-        """Set up the test case."""
-        super().setUp()
-
-        self.connection_name = "unittest-connection"
-
-        with patch(_PATCH_TARGET, FakeOpenSearch):
-            connections.create_connection(alias=self.connection_name, hosts=["fake-host"])
-
-        self.test_client = connections.get_connection(alias=self.connection_name)
-
-    def tearDown(self) -> None:
-        """Tear down the test case."""
-        super().tearDown()
-
-        connections.remove_connection(self.connection_name)
+    def create_test_client(self) -> Any:
+        """Create a mock OpenSearch client."""
+        return FakeOpenSearch()
