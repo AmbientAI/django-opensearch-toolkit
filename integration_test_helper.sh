@@ -90,11 +90,36 @@ _wait_for_opensearch_to_be_available() {
 
 _run_migrations() {
     PYTHONPATH=. python sample_project/manage.py opensearch_runmigrations sample_app --nodry
+    return $?
 }
 
 
 _display_migrations() {
     PYTHONPATH=. python sample_project/manage.py opensearch_displaymigrations sample_app
+    return $?
+}
+
+
+_run_api_server() {
+    PYTHONPATH=. python sample_project/manage.py runserver 10000 &
+}
+
+
+_stop_api_server() {
+    kill -9 $(lsof -t -i:10000)
+}
+
+
+_list_merchants() {
+    curl -s localhost:10000/api/v1/merchants/ | jq
+    return $?
+}
+
+
+_create_merchant() {
+    curl -s -X POST localhost:10000/api/v1/merchants/ \
+        -d '{"name": "Sony", "description": "Electronics manufacturer", "website": "sony.com"}'| jq
+    return $?
 }
 
 
@@ -108,8 +133,15 @@ case "$MODE" in
         _run_migrations
         sleep 1
         _display_migrations
+        _run_api_server
+        sleep 1
+        _list_merchants
+        _create_merchant
+        sleep 1
+        _list_merchants
         ;;
     stop)
+        _stop_api_server
         _stop_docker_container
         ;;
 esac
