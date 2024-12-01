@@ -17,6 +17,7 @@ class _OpenSearchTestCase(TestCase, abc.ABC):
     databases: Set[str] = set()
 
     def connections_to_patch(self) -> List[str]:
+        """Return a list of OpenSearch connection aliases to patch."""
         return []
 
     @abc.abstractmethod
