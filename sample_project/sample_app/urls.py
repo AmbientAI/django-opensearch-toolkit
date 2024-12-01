@@ -1,8 +1,8 @@
-"""URL configuration for sample_app."""
+"""URL configuration for sample_app app."""
 
 from django.urls import path
 
-from .views.merchants_view import MerchantView
+from sample_app.views.merchants_view import MerchantView
 
 
 urlpatterns = [

@@ -1,4 +1,4 @@
-"""API views for the Merchants index."""
+"""API views for the Merchants document model."""
 
 import json
 import time
