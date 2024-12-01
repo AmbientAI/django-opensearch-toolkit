@@ -1,3 +1,4 @@
+#/bin/bash
 set -ex
 
 # Create a virtual environment if it doesn't exist

@@ -1,3 +1,4 @@
+#/bin/bash
 set -e
 
 flake8 django_opensearch_toolkit
