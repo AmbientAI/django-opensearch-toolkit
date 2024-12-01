@@ -2,7 +2,7 @@
 
 from django.urls import path
 
-from sample_app.views.merchants_view import MerchantView
+from .views.merchants_view import MerchantView
 
 
 urlpatterns = [

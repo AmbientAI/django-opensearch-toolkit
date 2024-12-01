@@ -8,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views import View
 
-from sample_app.opensearch_models import Merchant
+from ..opensearch_models import Merchant
 
 
 @method_decorator(csrf_exempt, name="dispatch")

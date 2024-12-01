@@ -11,3 +11,8 @@ extend-exclude = '''
 [[tool.mypy.overrides]]
 module = 'parameterized.*'
 ignore_missing_imports = true
+
+
+[[tool.mypy.overrides]]
+module = 'openmock.*'
+ignore_missing_imports = true
