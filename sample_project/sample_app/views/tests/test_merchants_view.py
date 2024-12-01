@@ -123,18 +123,17 @@ class MerchantViewTests(MagicMockOpenSearchTestCase):
 
     def test_post_merchant_invalid_data(self) -> None:
         # Call our API
-        with patch("time.time", return_value=1733088413.532):
-            response = self.rest_client.post(
-                path=self.rest_endpoint,
-                data=json.dumps(
-                    {
-                        "name": "New Merchant",
-                        # Missing description
-                        "website": "http://newmerchant.com",
-                    }
-                ),
-                content_type="application/json",
-            )
+        response = self.rest_client.post(
+            path=self.rest_endpoint,
+            data=json.dumps(
+                {
+                    "name": "New Merchant",
+                    # Missing description
+                    "website": "http://newmerchant.com",
+                }
+            ),
+            content_type="application/json",
+        )
 
         # Check API response
         self.assertEqual(response.status_code, 400)
