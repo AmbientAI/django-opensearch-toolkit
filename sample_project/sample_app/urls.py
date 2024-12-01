@@ -1,4 +1,4 @@
-"""URL configuration for sample_app app."""
+"""URL configuration for sample_app."""
 
 from django.urls import path
 
