@@ -1,4 +1,4 @@
-"""Base classes for unittests requiring a mock OpenSearch client."""
+"""Base classes for unittests requiring an OpenSearch client."""
 
 import abc
 from typing import Any, List, Set
@@ -16,7 +16,8 @@ class _OpenSearchTestCase(TestCase, abc.ABC):
     # runner. Derived classes should override this if that is not the case.
     databases: Set[str] = set()
 
-    unittest_connection: str
+    # A mocked connection with this alias is always available for tests.
+    unittest_connection: str = "unittest"
 
     def connections_to_patch(self) -> List[str]:
         """Return a list of OpenSearch connection aliases to patch."""
@@ -24,7 +25,10 @@ class _OpenSearchTestCase(TestCase, abc.ABC):
 
     @abc.abstractmethod
     def create_test_client(self) -> Any:
-        """Create a mock OpenSearch client."""
+        """Create a mock OpenSearch client.
+
+        Implement this method in derived classes to return a mock OpenSearch low-level client.
+        """
         ...
 
     def setUp(self) -> None:
@@ -37,7 +41,6 @@ class _OpenSearchTestCase(TestCase, abc.ABC):
             self._original_connections[conn_alias] = connections.get_connection(alias=conn_alias)
             connections.add_connection(conn_alias, self.create_test_client())
 
-        self.unittest_connection = "unittest"
         connections.add_connection(self.unittest_connection, self.create_test_client())
 
     def tearDown(self) -> None:
@@ -55,24 +58,24 @@ class _OpenSearchTestCase(TestCase, abc.ABC):
 
 
 class MagicMockOpenSearchTestCase(_OpenSearchTestCase):
-    """Base class using Python's built-in MagicMock as the mock client.
+    """Base class for OpenSearch test cases using Python's built-in MagicMock as the mock client.
 
     Derived classes should implement return_value and side_effect behavior
     on the mock's methods, and inspect the call values.
     """
 
-    def create_test_client(self) -> Any:
+    def create_test_client(self) -> MagicMock:
         """Create a mock OpenSearch client."""
         return MagicMock()
 
 
 class FakeOpenSearchTestCase(_OpenSearchTestCase):
-    """Base class using openmock.FakeOpenSearch as the mock client.
+    """Base class for OpenSearch test cases using openmock.FakeOpenSearch as the mock client.
 
     WARNING: this mock client does not implement all the behavior of a real
     OpenSearch client. E.g., search() just returns all docs in the index.
     """
 
-    def create_test_client(self) -> Any:
+    def create_test_client(self) -> FakeOpenSearch:
         """Create a mock OpenSearch client."""
         return FakeOpenSearch()
