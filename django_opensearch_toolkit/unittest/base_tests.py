@@ -1,6 +1,6 @@
 """Base classes for unittests requiring a mock OpenSearch client."""
 
-from typing import Set
+from typing import List, Set
 from unittest.mock import patch, MagicMock
 
 from django.test import TestCase
@@ -27,25 +27,31 @@ class MagicMockOpenSearchTestCase(TestCase):
     # runner. Derived classes should override this if that is not the case.
     databases: Set[str] = set()
 
-    connection_name: str
-    test_client: MagicMock
+    def connections_to_patch(self) -> List[str]:
+        return []
 
     def setUp(self) -> None:
         """Set up the test case."""
         super().setUp()
 
-        self.connection_name = "unittest-connection"
+        self._original_connections = {}
 
-        with patch(_PATCH_TARGET, MagicMock):
-            connections.create_connection(alias=self.connection_name, hosts=["fake-host"])
-
-        self.test_client = connections.get_connection(alias=self.connection_name)
+        for conn_alias in self.connections_to_patch():
+            self._original_connections[conn_alias] = connections.get_connection(alias=conn_alias)
+            connections.add_connection(conn_alias, MagicMock())
 
     def tearDown(self) -> None:
         """Tear down the test case."""
+        for conn_alias in self.connections_to_patch():
+            connections.add_connection(conn_alias, self._original_connections[conn_alias])
+
         super().tearDown()
 
-        connections.remove_connection(self.connection_name)
+    def get_test_client(self, connection_name: str) -> MagicMock:
+        """Get the mock OpenSearch client for the given connection name."""
+        conn = connections.get_connection(alias=connection_name)
+        assert isinstance(conn, MagicMock)
+        return conn
 
 
 class FakeOpenSearchTestCase(TestCase):
