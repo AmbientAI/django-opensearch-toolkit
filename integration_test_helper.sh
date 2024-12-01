@@ -20,7 +20,8 @@ MODE=$1
 DOCKER_IMAGE=opensearchproject/opensearch:2.10.0
 DOCKER_CONTAINER=dot_opensearch
 HOST=localhost
-PORT=9200
+OS_PORT=9200
+API_PORT=10000
 
 
 _download_docker_image() {
@@ -34,7 +35,7 @@ _launch_docker_container() {
         -d \
         --rm \
         --name $DOCKER_CONTAINER \
-        -p $PORT:$PORT \
+        -p $OS_PORT:$OS_PORT \
         -e "discovery.type=single-node" \
         -e "plugins.security.disabled=true" \
         $DOCKER_IMAGE
@@ -50,7 +51,7 @@ _stop_docker_container() {
 
 _wait_for_opensearch_to_be_available() {
   # Parameters (optional: pass URL and max tries)
-  url=${1:-"http://$HOST:9200"}
+  url=${1:-"http://$HOST:$OS_PORT"}
   max_tries=${2:-10}
   sleep_time=${3:-3}
 
@@ -101,24 +102,27 @@ _display_migrations() {
 
 
 _run_api_server() {
-    PYTHONPATH=. python sample_project/manage.py runserver 10000 &
+    PYTHONPATH=. python sample_project/manage.py runserver $API_PORT &
 }
 
 
 _stop_api_server() {
-    kill -9 $(lsof -t -i:10000)
+    kill -9 $(lsof -t -i:$API_PORT)
+    return $?
 }
 
 
 _list_merchants() {
-    curl -s localhost:10000/api/v1/merchants/ | jq
+    curl -s -X GET $HOST:$API_PORT/api/v1/merchants/ \
+        | jq
     return $?
 }
 
 
 _create_merchant() {
-    curl -s -X POST localhost:10000/api/v1/merchants/ \
-        -d '{"name": "Sony", "description": "Electronics manufacturer", "website": "sony.com"}'| jq
+    curl -s -X POST $HOST:$API_PORT/api/v1/merchants/ \
+        -d '{"name": "Sony", "description": "Electronics manufacturer", "website": "sony.com"}' \
+        | jq
     return $?
 }
 
