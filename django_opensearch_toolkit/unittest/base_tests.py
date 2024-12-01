@@ -41,6 +41,12 @@ class MagicMockOpenSearchTestCase(TestCase):
 
         self.test_client = connections.get_connection(alias=self.connection_name)
 
+    def tearDown(self) -> None:
+        """Tear down the test case."""
+        super().tearDown()
+
+        connections.remove_connection(self.connection_name)
+
 
 class FakeOpenSearchTestCase(TestCase):
     """Base class using openmock.FakeOpenSearch as the mock client.
@@ -71,3 +77,9 @@ class FakeOpenSearchTestCase(TestCase):
             connections.create_connection(alias=self.connection_name, hosts=["fake-host"])
 
         self.test_client = connections.get_connection(alias=self.connection_name)
+
+    def tearDown(self) -> None:
+        """Tear down the test case."""
+        super().tearDown()
+
+        connections.remove_connection(self.connection_name)
