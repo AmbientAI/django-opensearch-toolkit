@@ -4,7 +4,7 @@ from typing import Any, Dict
 
 from django.apps import AppConfig
 from django.conf import settings
-from opensearch_dsl.connections import connections as opensearch_connections
+from opensearchpy.connection import connections
 
 
 _OpenSearchClusterName = str
@@ -21,7 +21,7 @@ class DjangoOpensearchToolkitConfig(AppConfig):
     def ready(self) -> None:
         """Initialize the app."""
         cluster_configurations = _get_opensearch_cluster_configurations()
-        opensearch_connections.configure(**cluster_configurations)
+        connections.configure(**cluster_configurations)
 
 
 def _get_opensearch_cluster_configurations() -> Dict[_OpenSearchClusterName, _OpenSearchConfiguration]:

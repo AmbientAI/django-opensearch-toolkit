@@ -1,3 +1,4 @@
+#/bin/bash
 set -ex
 
 # Create a virtual environment if it doesn't exist
@@ -10,5 +11,4 @@ source venv/bin/activate
 
 # Install the requirements
 pip install -r requirements.txt
-pip install -r requirements_tests.txt
-pip install -r requirements_linter.txt
+pip install -r requirements_dev.txt

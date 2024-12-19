@@ -19,7 +19,7 @@ jobs:
       - name: Install Requirements
         run: |
           pip install -r requirements.txt
-          pip install -r requirements_tests.txt
+          pip install -r requirements_dev.txt
 
       - name: Run Tests
         run: |

@@ -2,11 +2,24 @@
 line-length = 110
 
 
-extend-exclude = '''
-(
-	\/migrations\/
-)
-'''
+[tool.flake8]
+max-line-length = 110
+ignore = [
+	"ANN101", # Missing type annotation for self in method
+	"ANN102", # Missing type annotation for cls in classmethod
+	"ANN002", # Missing type annotation for *args
+	"ANN003", # Missing type annotation for **kwargs
+	"ANN401", # Dynamically typed expressions (typing.Any) are disallowed
+	"E203",   # whitespace before ':' (conflicts with black)
+	"W503",   # line break before binary operator  (conflicts with black)
+	"D106",   # Missing docstring in public nested class
+	"D107",   # Missing docstring in __init__
+]
+per-file-ignores = """
+    __init__.py: F401,D104
+    test_*: D102
+"""
+
 
 [[tool.mypy.overrides]]
 module = 'parameterized.*'
@@ -14,9 +27,5 @@ ignore_missing_imports = true
 
 
 [[tool.mypy.overrides]]
-module = 'opensearch_dsl.*'
-ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
-module = 'elasticmock.*'
+module = 'openmock.*'
 ignore_missing_imports = true

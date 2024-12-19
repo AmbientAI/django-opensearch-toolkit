@@ -1,4 +1,3 @@
-# pylint: disable=protected-access
 """Unit tests for OpenSearchMigrationsManager."""
 
 from typing import Optional
@@ -7,19 +6,19 @@ from unittest.mock import MagicMock
 from opensearchpy.exceptions import ConflictError
 import parameterized as paramt
 
-from django_opensearch_toolkit.migration_manager.opensearch_migration import OpenSearchMigration
 from django_opensearch_toolkit.migration_manager.migration_log import MigrationLog, MigrationLogStatus
 from django_opensearch_toolkit.migration_manager.migration_manager import OpenSearchMigrationsManager
-from django_opensearch_toolkit.unittest import FakeElasticsearchBaseTest, MagicMockOpenSearchBaseTest
+from django_opensearch_toolkit.migration_manager.opensearch_migration import OpenSearchMigration
+from django_opensearch_toolkit.unittest import FakeOpenSearchTestCase, MagicMockOpenSearchTestCase
 
 
-class TestMigration(OpenSearchMigration):
+class SampleMigration(OpenSearchMigration):
     """Migraton for unit test."""
 
     _KEY = "0001_test_migration"
     _DESCRIPTION = "This is a test migration"
 
-    def __init__(self, return_value: bool, should_raise: bool, key: str = _KEY):
+    def __init__(self, return_value: bool, should_raise: bool, key: str = _KEY) -> None:
         """Initialize the migration."""
         super().__init__(key=key)
         self.return_value = return_value
@@ -38,18 +37,19 @@ class TestMigration(OpenSearchMigration):
         return self.return_value
 
 
-class OpenSearchMigrationsManagerTest01(FakeElasticsearchBaseTest):
+class OpenSearchMigrationsManagerTest01(FakeOpenSearchTestCase):
     """Part 1 unit tests for OpenSearchMigrationsManager.
 
-    These tests are simpler to write with the FakeElasticsearch mock client.
+    These tests are simpler to write with the FakeOpenSearch mock client.
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         super().setUp()
-        self.manager = OpenSearchMigrationsManager(connection_name=self.connection_name)
+        self.manager = OpenSearchMigrationsManager(connection_name=self.unittest_connection)
+        self.test_client = self.get_test_client(self.unittest_connection)
         self.assertEqual(self.manager.client, self.test_client)
 
-    def test_index_management(self):
+    def test_index_management(self) -> None:
         """Test the methods that create and delete the migration log index."""
         self.assertFalse(self.test_client.indices.exists(MigrationLog.Index.name))
 
@@ -61,15 +61,15 @@ class OpenSearchMigrationsManagerTest01(FakeElasticsearchBaseTest):
             self.manager._delete_migration_logs_index_if_exists()  # idempodent
             self.assertFalse(self.test_client.indices.exists(MigrationLog.Index.name))
 
-    def _create_migration_log(self, log: MigrationLog):
+    def _create_migration_log(self, log: MigrationLog) -> None:
         self.test_client.index(
             index=MigrationLog.Index.name,
             id=log.meta.id,
             body=log.to_dict(include_meta=False),
         )
 
-    def test_get_all_migration_logs(self):
-        """Unit tests for _get_all_migration_logs() and _get_and_display_all_migration_logs()."""
+    def test_get_all_migration_logs(self) -> None:
+        """Test _get_all_migration_logs() and _get_and_display_all_migration_logs()."""
         self.manager._create_migration_logs_index_if_not_exists()
 
         # Initially, no logs
@@ -85,8 +85,8 @@ class OpenSearchMigrationsManagerTest01(FakeElasticsearchBaseTest):
         for log in logs:
             self._create_migration_log(log)
 
-        # Confirmed they are returned
-        # NOTE: they should be returned in order. unfortunately, the mock ES
+        # Confirm they are returned
+        # NOTE: they should be returned in order. Unfortunately, the FakeOpenSearch
         # client just returns everything in the index and doesn't respect the
         # query params, including sort()
         expected_keys = set(["id_0001", "id_0002", "id_0003"])
@@ -99,8 +99,8 @@ class OpenSearchMigrationsManagerTest01(FakeElasticsearchBaseTest):
             set(log.key for log in self.manager._get_and_display_all_migration_logs()),
         )
 
-    def test_run_migrations_empty(self):
-        """Unit tests for run_migrations() when supplied with no migrations."""
+    def test_run_migrations_empty(self) -> None:
+        """Test run_migrations() when supplied with no migrations."""
         # Initially no index
         self.assertFalse(self.test_client.indices.exists(MigrationLog.Index.name))
 
@@ -116,8 +116,8 @@ class OpenSearchMigrationsManagerTest01(FakeElasticsearchBaseTest):
             (MigrationLogStatus.FAILED.value,),
         ]
     )
-    def test_run_migrations_failed_or_inprogress(self, status: str):
-        """Unit tests for run_migrations() when there's existing failed or in-progress migrations."""
+    def test_run_migrations_failed_or_inprogress(self, status: str) -> None:
+        """Test run_migrations() when there's existing failed or in-progress migrations."""
         self.manager._create_migration_logs_index_if_not_exists()
         self._create_migration_log(
             MigrationLog(
@@ -128,13 +128,14 @@ class OpenSearchMigrationsManagerTest01(FakeElasticsearchBaseTest):
         )
         self.assertEqual(len(self.manager._get_all_migration_logs()), 1)
 
-        self.manager._run_migration = MagicMock()
+        self.manager._run_migration = MagicMock()  # type: ignore[method-assign]
         self.manager.run_migrations([])
 
         # We abort before running any migrations
         self.manager._run_migration.assert_not_called()
 
-    def test_run_migrations_history_mismatch(self):
+    def test_run_migrations_history_mismatch(self) -> None:
+        """Test run_migrations() when there's existing a mismatch in the migration history."""
         self.manager._create_migration_logs_index_if_not_exists()
         self._create_migration_log(
             MigrationLog(
@@ -145,9 +146,9 @@ class OpenSearchMigrationsManagerTest01(FakeElasticsearchBaseTest):
         )
         self.assertEqual(len(self.manager._get_all_migration_logs()), 1)
 
-        self.manager._run_migration = MagicMock()
+        self.manager._run_migration = MagicMock()  # type: ignore[method-assign]
         migrations = [
-            TestMigration(True, False),  # key doesn't match what's in the log
+            SampleMigration(True, False),  # key doesn't match what's in the log
         ]
         self.manager.run_migrations(migrations)
 
@@ -160,8 +161,8 @@ class OpenSearchMigrationsManagerTest01(FakeElasticsearchBaseTest):
             (False,),
         ]
     )
-    def test_run_migrations_succeeds(self, dry: bool):
-        """."""
+    def test_run_migrations_succeeds(self, dry: bool) -> None:
+        """Test a successful run of run_migrations()."""
         self.manager._create_migration_logs_index_if_not_exists()
         self._create_migration_log(
             MigrationLog(
@@ -179,13 +180,13 @@ class OpenSearchMigrationsManagerTest01(FakeElasticsearchBaseTest):
         )
         self.assertEqual(len(self.manager._get_all_migration_logs()), 2)
 
-        self.manager._run_migration = MagicMock()
+        self.manager._run_migration = MagicMock()  # type: ignore[method-assign]
         migrations = [
             # these were already applied
-            TestMigration(True, False, key="id_0001"),
-            TestMigration(True, False, key="id_0002"),
+            SampleMigration(True, False, key="id_0001"),
+            SampleMigration(True, False, key="id_0002"),
             # this needs to be applied
-            TestMigration(True, False, key="id_0003"),
+            SampleMigration(True, False, key="id_0003"),
         ]
         self.manager.run_migrations(migrations, dry=dry)
 
@@ -195,26 +196,26 @@ class OpenSearchMigrationsManagerTest01(FakeElasticsearchBaseTest):
             self.manager._run_migration.assert_called_once_with(order=2, migration=migrations[2])
 
 
-class OpenSearchMigrationsManagerTest02(MagicMockOpenSearchBaseTest):
+class OpenSearchMigrationsManagerTest02(MagicMockOpenSearchTestCase):
     """Part 2 unit tests for OpenSearchMigrationsManager.
 
     These tests are simpler to write with the MagicMock mock client.
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         super().setUp()
-        self.manager = OpenSearchMigrationsManager(connection_name=self.connection_name)
+        self.manager = OpenSearchMigrationsManager(connection_name=self.unittest_connection)
+        self.test_client = self.get_test_client(self.unittest_connection)
         self.assertEqual(self.manager.client, self.test_client)
         self.test_client.reset_mock()
 
-    def test_create_migration_log_atomic_success(self):
+    def test_create_migration_log_atomic_success(self) -> None:
         """Test for _create_migration_log_atomic() that succeeds."""
         log = MigrationLog(order=13, key="id_0013")
 
-        # Mock the resposes of the ES Client
+        # Mock the resposes of the OpenSearch Client
         self.test_client.create.return_value = {"result": "created"}
         self.test_client.get.return_value = {
-            # https://www.elastic.co/guide/en/elasticsearch/reference/7.10/docs-get.html
             "found": True,
             "_index": MigrationLog.Index.name,
             "_id": "id_0013",
@@ -227,7 +228,7 @@ class OpenSearchMigrationsManagerTest02(MagicMockOpenSearchBaseTest):
         success = self.manager._create_migration_log_atomic(log)
         self.assertTrue(success)
 
-        # Confirm the calls that were issued against the ES client
+        # Confirm the calls that were issued against the OpenSearch client
         #  1. Create the document: should have correct index, id, and body
         #  2. Flush the correct index
         #  3. Get the correct document to ensure it exists
@@ -245,18 +246,18 @@ class OpenSearchMigrationsManagerTest02(MagicMockOpenSearchBaseTest):
             id="id_0013",
         )
 
-    def test_create_migration_log_atomic_fails_duplicate(self):
+    def test_create_migration_log_atomic_fails_duplicate(self) -> None:
         """Test for _create_migration_log_atomic() that fails b/c of a duplicate log."""
         log = MigrationLog(order=13, key="id_0013")
 
-        # Mock the resposes of the ES Client
+        # Mock the resposes of the OpenSearch Client
         self.test_client.create.side_effect = ConflictError("Duplicate object")
 
         # Try to create the log
         success = self.manager._create_migration_log_atomic(log)
         self.assertFalse(success)
 
-        # Confirm the calls that were issued against the ES client
+        # Confirm the calls that were issued against the OpenSearch client
         #  1. Create the document: should have correct index, id, and body
         #  -- fails after this, so no more calls
         self.assertEqual(len(self.test_client.mock_calls), 1)
@@ -274,15 +275,14 @@ class OpenSearchMigrationsManagerTest02(MagicMockOpenSearchBaseTest):
             (False, True),
         ]
     )
-    def test_run_migration(self, return_value: bool, should_raise: bool):
+    def test_run_migration(self, return_value: bool, should_raise: bool) -> None:
         """Test the _run_migration() method."""
         order = 12
-        migration = TestMigration(return_value=return_value, should_raise=should_raise)
+        migration = SampleMigration(return_value=return_value, should_raise=should_raise)
 
-        # Mock the resposes of the ES Client
+        # Mock the resposes of the OpenSearch Client
         self.test_client.create.return_value = {"result": "created"}
         self.test_client.get.return_value = {
-            # https://www.elastic.co/guide/en/elasticsearch/reference/7.10/docs-get.html
             "found": True,
             "_index": MigrationLog.Index.name,
             "_id": migration.get_key(),
@@ -299,7 +299,7 @@ class OpenSearchMigrationsManagerTest02(MagicMockOpenSearchBaseTest):
             MigrationLogStatus.SUCCEEDED.value if should_succeed else MigrationLogStatus.FAILED.value
         )
         self.assertEqual(success, should_succeed)
-        self.assertEqual(migration.apply_was_run_with, self.connection_name)
+        self.assertEqual(migration.apply_was_run_with, self.unittest_connection)
 
         # Check that the migration log was initially created
         create_kwargs = self.test_client.create.mock_calls[0].kwargs
@@ -336,6 +336,7 @@ class OpenSearchMigrationsManagerTest02(MagicMockOpenSearchBaseTest):
                     },
                 },
                 "refresh": False,
+                "retry_on_conflict": 0,
             },
         )
 

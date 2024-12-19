@@ -1,0 +1,11 @@
+# For unit tests
+coverage==7.6.1
+parameterized==0.9.0
+
+# Formatters and Static Analyzers
+black==24.8.0
+flake8==7.1.1
+flake8-annotations==3.1.1
+flake8-docstrings==1.7.0
+Flake8-pyproject==1.2.3
+mypy==1.13.0

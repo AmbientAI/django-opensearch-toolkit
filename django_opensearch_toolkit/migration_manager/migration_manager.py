@@ -2,11 +2,11 @@
 
 from logging import getLogger
 import time
-from typing import List
+from typing import List, Sequence
 
+from opensearchpy.connection import connections
 from opensearchpy.exceptions import ConflictError, NotFoundError
-from opensearch_dsl import Index
-from opensearch_dsl.connections import connections
+from opensearchpy.helpers.index import Index
 
 from django_opensearch_toolkit.migration_manager.migration_log import MigrationLog, MigrationLogStatus
 from django_opensearch_toolkit.migration_manager.opensearch_migration import OpenSearchMigration
@@ -18,7 +18,7 @@ _logger = getLogger(__name__)
 class OpenSearchMigrationsManager:
     """Utility class for managing the state of migrations against an OpenSearch cluster."""
 
-    def __init__(self, connection_name: str, max_migrations_to_fetch: int = 1000):
+    def __init__(self, connection_name: str, max_migrations_to_fetch: int = 5_000) -> None:
         """Initialize the manager.
 
         NOTE: this implementation will fetch all migration logs in one shot and
@@ -29,17 +29,17 @@ class OpenSearchMigrationsManager:
         """
         self.connection_name = connection_name
         self.max_migrations_to_fetch = max_migrations_to_fetch
-        self.migration_log_index = Index(MigrationLog.Index.name, using=self.connection_name)
+        self.migration_log_index = Index(name=MigrationLog.Index.name, using=self.connection_name)
         self.client = connections.get_connection(self.connection_name)  # low-level client
 
     # Public Methods
 
-    def display_migrations(self):
+    def display_migrations(self) -> None:
         """Display the migration log history."""
         self._create_migration_logs_index_if_not_exists()
         self._get_and_display_all_migration_logs()
 
-    def run_migrations(self, migrations: List[OpenSearchMigration], dry: bool = True):
+    def run_migrations(self, migrations: Sequence[OpenSearchMigration], dry: bool = True) -> None:
         """Apply all migrations, skipping those that were already applied.
 
         Will abort on any faillure or any inconsistency in the migration log.
@@ -95,23 +95,23 @@ class OpenSearchMigrationsManager:
 
     # Private Methods
 
-    def _log(self, message: str):
+    def _log(self, message: str) -> None:
         """Log message with a custom prefix."""
         _logger.info(f"[{self.__class__.__name__}] {message}")
 
-    def _create_migration_logs_index_if_not_exists(self):
+    def _create_migration_logs_index_if_not_exists(self) -> None:
         """Create the index that tracks the migration logs."""
         if not self.migration_log_index.exists():
             self._log("Creating migration logs index")
             MigrationLog.init(using=self.connection_name)
 
-    def _delete_migration_logs_index_if_exists(self):
+    def _delete_migration_logs_index_if_exists(self) -> None:
         """Delete the index that tracks the migration logs."""
         if self.migration_log_index.exists():
             self._log("Deleting migration logs index")
             self.migration_log_index.delete()
 
-    def _print_migration_logs(self, migration_logs: List[MigrationLog]):
+    def _print_migration_logs(self, migration_logs: List[MigrationLog]) -> None:
         """Pretty-print the provided migration logs."""
         for log in migration_logs:
             self._log(
@@ -135,10 +135,10 @@ class OpenSearchMigrationsManager:
         return existing_migration_logs
 
     def _create_migration_log_atomic(self, log: MigrationLog) -> bool:
-        """Try to create the log as a document in the migrations_log index, and fail if it exists.
+        """Try to create the log as a document in the migration_log_index, and fail if it exists.
 
         We have this helper because MigrationLog.save() uses the `index` API instead
-        of the `create` API. opensearch-dsl does not expose access to the latter
+        of the `create` API. The Document helper does not expose access to the latter
         API, so we use the low-level client here.
         """
         # Try to create it
@@ -178,10 +178,10 @@ class OpenSearchMigrationsManager:
         """Apply a migration using write-ahead logging and terminal log updates."""
         started_at = int(1000 * time.time())
 
-        def _log_progress(message: str):
+        def _print_progress(message: str) -> None:
             self._log(f"[key={migration.get_key()}] {message}")
 
-        _log_progress("[1/4] Creating migration log")
+        _print_progress("[1/4] Creating migration log")
         log = MigrationLog(
             order=order,
             key=migration.get_key(),
@@ -195,16 +195,16 @@ class OpenSearchMigrationsManager:
             self._log("Failed to create migration log")
             return False
 
-        _log_progress("[2/4] Applying migration operation")
+        _print_progress("[2/4] Applying migration operation")
         success = False
         try:
             success = migration.apply(self.connection_name)
-        except Exception:  # pylint: disable=broad-except
+        except Exception:
             _logger.exception("Failed to apply migration")
         ended_at = int(1000 * time.time())
         new_status = MigrationLogStatus.SUCCEEDED.value if success else MigrationLogStatus.FAILED.value
 
-        _log_progress(f"[3/4] Migration {new_status.lower()}; updating migration log")
+        _print_progress(f"[3/4] Migration {new_status.lower()}; updating migration log")
         result = log.update(
             using=self.connection_name,
             # updated fields:
@@ -216,5 +216,5 @@ class OpenSearchMigrationsManager:
             return False
         self.migration_log_index.flush()
 
-        _log_progress("[4/4] Done")
+        _print_progress("[4/4] Done")
         return success
