@@ -6,11 +6,39 @@ readme = "README.md"
 license = { file = "LICENSE" }
 authors = [{ name = "David Tagliamonti" }, { email = "dtag@ambient.ai" }]
 requires-python = ">=3.9"
+dynamic = ["dependencies"]
+classifiers = [
+	"Development Status :: 3 - Alpha",
+	"Environment :: Web Environment",
+	"Framework :: Django",
+	"Intended Audience :: Developers",
+	"Programming Language :: Python :: 3",
+	"Programming Language :: Python :: 3.9",
+	"Programming Language :: Python :: 3.10",
+	"Programming Language :: Python :: 3.11",
+	"Programming Language :: Python :: 3.12",
+	"Programming Language :: Python :: 3.13",
+	"Topic :: Software Development :: Libraries :: Python Modules",
+]
 
 
 [project.urls]
 homepage = "https://github.com/AmbientAI/django-opensearch-toolkit"
 repository = "https://github.com/AmbientAI/django-opensearch-toolkit"
+
+
+[build-system]
+requires = ["setuptools>=61.0", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
+
+
+[tool.setuptools.packages.find]
+include = ["django_opensearch_toolkit*"]
+exclude = ["*tests*"]
 
 
 [tool.black]
