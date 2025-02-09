@@ -2,8 +2,8 @@
 
 We track migrations against a cluster using a dedicated index in the cluster.
 Each document represents a single migration that was run/is running/failed to run.
-This is similar to how Django uses a table in a RDBMS system to track its migrations
-against that system, with each row being a seprate migration.
+This is similar to how Django uses a table in a RDBMS databases to track its
+migrations against that database, with each row being a separate migration.
 """
 
 import enum
@@ -39,7 +39,7 @@ class MigrationLog(Document):
     class Index:
         """Configuration for the index."""
 
-        name = ".opensearch_toolkit.migration_log"
+        name = ".django_opensearch_toolkit.migration_log"
         settings = {
             "number_of_shards": 1,
             "number_of_replicas": 1,
