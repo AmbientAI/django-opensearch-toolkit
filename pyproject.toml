@@ -1,3 +1,18 @@
+[project]
+name = "django-opensearch-toolkit"
+version = "0.1.0"
+description = "A Django app for interacting with OpenSearch clusters."
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "David Tagliamonti" }, { email = "dtag@ambient.ai" }]
+requires-python = ">=3.9"
+
+
+[project.urls]
+homepage = "https://github.com/AmbientAI/django-opensearch-toolkit"
+repository = "https://github.com/AmbientAI/django-opensearch-toolkit"
+
+
 [tool.black]
 line-length = 110
 
