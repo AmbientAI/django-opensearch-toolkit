@@ -79,7 +79,7 @@ python manage.py opensearch_displaymigrations sample_app
 From the project root, run:
 
 ```bash
-./setup_dev.sh              # Creates a virtual environment in the project directory & downloads all requirements
+./scripts/setup_dev.sh      # Creates a virtual environment in the project directory & downloads all requirements
 source venv/bin/activate    # Step into your virtual environment
 ./run_tests.sh              # Confirm all tests pass
 ./run_linter.sh             # Confirm all static checks pass
