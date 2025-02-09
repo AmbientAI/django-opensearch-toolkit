@@ -39,6 +39,7 @@ dependencies = { file = ["requirements.txt"] }
 include = ["django_opensearch_toolkit*"]
 exclude = ["*tests*"]
 
+
 [tool.black]
 line-length = 110
 
