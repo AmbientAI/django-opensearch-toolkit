@@ -42,7 +42,7 @@ class OpenSearchCommand(BaseCommand):
         return available_clusters
 
     @staticmethod
-    def _get_migrations_by_cluster(  # noqa: C901
+    def _get_migrations_by_cluster(
         available_clusters: List[str],
     ) -> Dict[str, List[OpenSearchMigration]]:
         all_migration_paths = getattr(settings, "OPENSEARCH_MIGRATION_PATHS", {})
