@@ -7,10 +7,12 @@ It is implemented as a thin wrapper over the [opensearch-py](https://pypi.org/pr
 Some key advantages to using this app:
 
 - Configure connections to multiple clusters using the Django settings module
+    - This is completely analogous to how Django manages connections to multiple RDBMS databases
 - Define all cluster settings, ISM policies, and index template mappings _in code_, via migration files
-  - This make it easier to track and replicate these settings across environments (e.g., dev & prod clusters).
+    - This make it easier to track and replicate these settings across environments (e.g., dev & prod clusters).
 - Run migrations against clusters using Django management commands
-  - Under the hood, it tracks the state of migrations in a hidden index in the cluster itself, similar to what Django does using tables in relational dbs.
+    - This is analogous to running `python manage.py migrate` for RDBMS databases
+    - Under the hood, it tracks the state of migrations in a hidden index in the cluster itself, similar to what Django does using tables in relational dbs.
 - Write cleaner unit tests with helpful test runners and mocks
 
 ## Quick Start
@@ -50,7 +52,6 @@ OPENSEARCH_CLUSTERS = {
 ```python
 # settings.py
 
-
 OPENSEARCH_MIGRATION_PATHS = {
     # cluster_name -> module_path
     #   - Each module should define a variable named MIGRATIONS.
@@ -78,10 +79,10 @@ python manage.py opensearch_displaymigrations sample_app
 From the project root, run:
 
 ```bash
-./setup.sh                  # Creates a virtual environment in the project directory & downloads all requirements
-source venv/bin/activate    # Step into your virtual environment
-./run_tests.sh              # Confirm all tests pass
-./run_linter.sh             # Confirm all static checks pass
-./run_integration_tests.sh  # Run an integration test (requires docker daemon to be running)
-deactivate                  # Leave your virtual environment
+./scripts/setup_dev.sh    # Creates a virtual environment in the project directory & downloads all requirements
+source venv/bin/activate  # Step into your virtual environment
+make test                 # Confirm all tests pass
+make check                # Confirm all static checks pass
+make integration-test     # Run an integration test (requires docker daemon to be running)
+deactivate                # Leave your virtual environment
 ```

@@ -146,9 +146,9 @@ OPENSEARCH_CLUSTERS = {
 
 
 # OpenSearch Migrations
-# cluster_name -> module_path
-#   - Each module should define a variable named MIGRATIONS.
-#   - The module will be dynamically imported and the MIGRATIONS variable will be used.
 OPENSEARCH_MIGRATION_PATHS = {
+    # cluster_name -> module_path
+    #   - Each module should define a variable named MIGRATIONS.
+    #   - The module will be dynamically imported and the MIGRATIONS variable will be used.
     "sample_app": "sample_app.opensearch_migrations",
 }

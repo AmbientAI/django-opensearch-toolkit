@@ -5,8 +5,8 @@ import time
 
 from django.http import JsonResponse, HttpResponse, HttpRequest
 from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 
 from ..opensearch_models import Merchant
 

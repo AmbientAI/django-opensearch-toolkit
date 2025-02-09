@@ -1,6 +1,7 @@
 """Convention for specifying a migration to run against an OpenSearch cluster."""
 
 import abc
+from typing import Final
 
 
 class OpenSearchMigration(abc.ABC):
@@ -12,8 +13,14 @@ class OpenSearchMigration(abc.ABC):
     """
 
     def __init__(self, key: str) -> None:
-        """Initialize the migration."""
-        self._key = key
+        """Initialize the migration with a unique identifier.
+
+        Args:
+            key: A globally unique identifier for this migration.
+        """
+        if not key.strip():
+            raise ValueError("Migration key cannot be empty")
+        self._key: Final[str] = key
 
     def get_key(self) -> str:
         """Return a globally unique key among all migrations for a given cluster."""
@@ -26,5 +33,12 @@ class OpenSearchMigration(abc.ABC):
 
     @abc.abstractmethod
     def apply(self, connection_name: str) -> bool:
-        """Perform the migration."""
+        """Perform the migration against the specified connection.
+
+        Args:
+            connection_name: The name of the OpenSearch connection to use.
+
+        Returns:
+            bool: True if the migration was successful, False otherwise.
+        """
         pass

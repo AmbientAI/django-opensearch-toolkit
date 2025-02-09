@@ -1,11 +1,10 @@
-# Workflow for checking linter compliance of Python files.
-name: Python Lint
+name: Python Static Analyzers
 
 on: [pull_request]
 
 jobs:
   lint:
-    name: Python Lint
+    name: Python Static Analyzers
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -18,9 +17,8 @@ jobs:
 
       - name: Install Requirements
         run: |
-          pip install -r requirements.txt
-          pip install -r requirements_dev.txt
+          make install_requirements
 
-      - name: Run Linters
+      - name: Run Analyzers
         run: |
-          ./run_linter.sh
+          make check
