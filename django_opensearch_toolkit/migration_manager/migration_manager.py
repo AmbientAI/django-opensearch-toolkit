@@ -2,8 +2,9 @@
 
 from logging import getLogger
 import time
-from typing import List, Sequence
+from typing import Final, List, Sequence
 
+from opensearchpy.client import OpenSearch
 from opensearchpy.connection import connections
 from opensearchpy.exceptions import ConflictError, NotFoundError
 from opensearchpy.helpers.index import Index
@@ -27,10 +28,13 @@ class OpenSearchMigrationsManager:
         The implementation here is correct only if the number of logs is less than
         the `max_migrations_to_fetch` parameter.
         """
-        self.connection_name = connection_name
-        self.max_migrations_to_fetch = max_migrations_to_fetch
-        self.migration_log_index = Index(name=MigrationLog.Index.name, using=self.connection_name)
-        self.client = connections.get_connection(self.connection_name)  # low-level client
+        self.connection_name: Final[str] = connection_name
+        self.max_migrations_to_fetch: Final[int] = max_migrations_to_fetch
+        self.migration_log_index: Final[Index] = Index(
+            name=MigrationLog.Index.name,
+            using=self.connection_name,
+        )
+        self.client: Final[OpenSearch] = connections.get_connection(self.connection_name)  # low-level client
 
     # Public Methods
 
