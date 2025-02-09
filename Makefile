@@ -40,6 +40,13 @@ test:
 	PYTHONPATH=. python sample_project/manage.py test sample_app --verbosity=2
 
 
+.PHONY: integration-test
+integration-test:
+	bash ./scripts/integration_test_helper.sh start
+	bash ./scripts/integration_test_helper.sh check
+	bash ./scripts/integration_test_helper.sh stop
+
+
 ############################################################################
 # Linting
 ############################################################################
