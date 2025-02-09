@@ -55,7 +55,7 @@ class OpenSearchCommand(BaseCommand):
         for cluster_name, migrations_path in all_migration_paths.items():
             if not isinstance(cluster_name, str):
                 raise CommandError(
-                    f"Invalid cluster name '{cluster_name}' for migraton paths. "
+                    f"Invalid cluster name '{cluster_name}' for migration paths. "
                     "All cluster names must be strings."
                 )
             if cluster_name not in available_clusters:
