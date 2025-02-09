@@ -25,7 +25,7 @@ class DjangoOpensearchToolkitConfig(AppConfig):
 
 
 def _get_opensearch_cluster_configurations() -> Dict[_OpenSearchClusterName, _OpenSearchConfiguration]:
-    """Load the OpenSearch cluser configrations from the project settings file."""
+    """Load the OpenSearch cluster configurations from the project settings file."""
     cluster_configurations = getattr(settings, "OPENSEARCH_CLUSTERS", {})
 
     if not isinstance(cluster_configurations, dict):
