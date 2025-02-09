@@ -10,5 +10,4 @@ fi
 source venv/bin/activate
 
 # Install the requirements
-pip install -r requirements.txt
-pip install -r requirements_dev.txt
+make install_requirements
