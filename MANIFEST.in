@@ -1,4 +1,22 @@
+# Core package files
 include LICENSE
 include README.md
 include requirements.txt
-recursive-include django_opensearch_toolkit *.py
+include pyproject.toml
+
+# Main package
+recursive-include django_opensearch_toolkit *
+
+# Explicit excludes
+global-exclude *.py[cod]
+global-exclude __pycache__
+global-exclude *.so
+global-exclude .gitignore
+global-exclude Makefile
+global-exclude requirements_dev.txt
+
+# Exclude entire directories
+prune sample_project
+prune .github
+prune scripts
+prune **/tests
