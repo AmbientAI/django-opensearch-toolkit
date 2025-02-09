@@ -190,9 +190,9 @@ class OpenSearchMigrationsManager:
             order=order,
             key=migration.get_key(),
             operation=migration.serialize(),
+            status=MigrationLogStatus.IN_PROGRESS.value,
             started_at=started_at,
             ended_at=None,
-            status=MigrationLogStatus.IN_PROGRESS.value,
         )
         was_created = self._create_migration_log_atomic(log)
         if not was_created:
@@ -212,8 +212,8 @@ class OpenSearchMigrationsManager:
         result = log.update(
             using=self.connection_name,
             # updated fields:
-            ended_at=ended_at,
             status=new_status,
+            ended_at=ended_at,
         )
         if result != "updated":
             self._log("Failed to update migration log")
