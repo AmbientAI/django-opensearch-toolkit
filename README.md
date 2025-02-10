@@ -7,12 +7,12 @@ It is implemented as a thin wrapper over the [opensearch-py](https://pypi.org/pr
 Some key advantages to using this app:
 
 - Configure connections to multiple clusters using the Django settings module
-    - This is completely analogous to how Django manages connections to multiple RDBMS databases
+    - This is completely analogous to how Django manages connections to multiple RDBMS databases.
 - Define all cluster settings, ISM policies, and index template mappings _in code_, via migration files
     - This makes it easier to track and replicate these settings across environments (e.g., dev & prod clusters).
     - This is analogous to how Django generates migration files for schema changes. The difference is that the migrations here are manually-written, not auto-generated.
 - Run migrations against clusters using Django management commands
-    - This is analogous to running `python manage.py migrate` for RDBMS databases
+    - This is analogous to running `python manage.py migrate` for RDBMS databases.
     - Under the hood, it tracks the state of migrations in a hidden index in the cluster itself, similar to what Django does using tables in relational dbs.
 - Write cleaner unit tests with helpful test runners and mocks
 
