@@ -1,6 +1,6 @@
 name: Integration Tests
 
-on: [pull_request]
+on: [push, pull_request]
 
 jobs:
   integration-test:
