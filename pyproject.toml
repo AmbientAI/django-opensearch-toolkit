@@ -1,14 +1,13 @@
 [project]
 name = "django-opensearch-toolkit"
 version = "0.1.0"
-description = "A Django app for interacting with OpenSearch clusters."
+description = "A Django app for interacting with OpenSearch clusters"
 readme = "README.md"
 license = { file = "LICENSE" }
 authors = [{ name = "David Tagliamonti", email = "dtag@ambient.ai" }]
 requires-python = ">=3.9"
 dynamic = ["dependencies"]
 classifiers = [
-	"Development Status :: 3 - Alpha",
 	"Environment :: Web Environment",
 	"Framework :: Django",
 	"Intended Audience :: Developers",
@@ -18,13 +17,15 @@ classifiers = [
 	"Programming Language :: Python :: 3.11",
 	"Programming Language :: Python :: 3.12",
 	"Programming Language :: Python :: 3.13",
-	"Topic :: Software Development :: Libraries :: Python Modules",
+	"Operating System :: OS Independent",
+	"Typing :: Typed",
 ]
 
 
 [project.urls]
-homepage = "https://github.com/AmbientAI/django-opensearch-toolkit"
-repository = "https://github.com/AmbientAI/django-opensearch-toolkit"
+Homepage = "https://github.com/AmbientAI/django-opensearch-toolkit"
+Repository = "https://github.com/AmbientAI/django-opensearch-toolkit"
+Issues = "https://github.com/AmbientAI/django-opensearch-toolkit/issues"
 
 
 [build-system]
