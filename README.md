@@ -18,7 +18,13 @@ Some key advantages to using this app:
 
 ## Quick Start
 
-1. Add this app to your project's list of installed apps:
+1. Install the package:
+
+```shell
+pip install django-opensearch-toolkit
+```
+
+2. Add this app to your project's list of installed apps:
 
 ```python
 # settings.py
@@ -30,7 +36,7 @@ INSTALLED_APPS = [
 ]
 ```
 
-2. Define the clusters to configure:
+3. Define the clusters to configure:
 
 ```python
 # settings.py
@@ -48,7 +54,7 @@ OPENSEARCH_CLUSTERS = {
 }
 ```
 
-3. Register migrations for each cluster
+4. Register migrations for each cluster
 
 ```python
 # settings.py
@@ -63,9 +69,9 @@ OPENSEARCH_MIGRATION_PATHS = {
 
 NOTE: Currently, we only support a dependency _chain_, instead of a more generic dependency _graph_, like Django does for its migrations.
 
-4. Implement your migrations and ensure they are discoverable at the paths indicated in the previous step. See the `sample_project/sample_app/opensearch_migrations/__init__.py` for an example.
+5. Implement your migrations and ensure they are discoverable at the paths indicated in the previous step. See the `sample_project/sample_app/opensearch_migrations/__init__.py` for an example.
 
-5. Display and run your migrations
+6. Display and run your migrations
 
 ```bash
 cd sample_project
