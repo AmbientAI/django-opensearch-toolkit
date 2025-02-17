@@ -16,7 +16,7 @@ global-exclude Makefile
 global-exclude requirements_dev.txt
 
 # Exclude entire directories
-prune sample_project
 prune .github
+prune sample_project
 prune scripts
 prune **/tests
