@@ -26,6 +26,7 @@ classifiers = [
 Homepage = "https://github.com/AmbientAI/django-opensearch-toolkit"
 Repository = "https://github.com/AmbientAI/django-opensearch-toolkit"
 Issues = "https://github.com/AmbientAI/django-opensearch-toolkit/issues"
+Changelog = "https://github.com/AmbientAI/django-opensearch-toolkit/blob/main/CHANGELOG.md"
 
 
 [build-system]
