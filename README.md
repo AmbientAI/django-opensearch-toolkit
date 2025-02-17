@@ -20,7 +20,7 @@ Some key advantages to using this app:
 
 1. Install the package:
 
-```shell
+```bash
 pip install django-opensearch-toolkit
 ```
 
