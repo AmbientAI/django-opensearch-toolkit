@@ -3,7 +3,7 @@
 ############################################################
 
 all: default
-default: install_requirements test
+default: build_dist
 
 
 ############################################################################
@@ -59,3 +59,25 @@ check:
 	flake8 sample_project
 	mypy django_opensearch_toolkit
 	mypy sample_project
+
+
+############################################################################
+# Packaging
+############################################################################
+
+.PHONY: install_build_tools
+install_build_tools:  upgrade_pip
+	pip install --upgrade build
+
+
+.PHONY: build_dist
+build_dist: install_build_tools
+	python -m build
+
+
+.PHONY: clean
+clean:
+	rm -rf .mypy_cache
+	rm -rf build
+	rm -rf dist
+	rm -rf django_opensearch_toolkit.egg-info
