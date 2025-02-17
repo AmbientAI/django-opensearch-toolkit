@@ -59,3 +59,17 @@ check:
 	flake8 sample_project
 	mypy django_opensearch_toolkit
 	mypy sample_project
+
+
+############################################################################
+# Packaging
+############################################################################
+
+.PHONY: install_build_tools
+install_build_tools:  upgrade_pip
+	pip install --upgrade build
+
+
+.PHONY: build_dist
+build_dist: install_build_tools
+	python -m build
