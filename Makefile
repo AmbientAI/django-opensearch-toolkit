@@ -3,7 +3,7 @@
 ############################################################
 
 all: default
-default: install_requirements test
+default: build_dist
 
 
 ############################################################################
@@ -73,3 +73,11 @@ install_build_tools:  upgrade_pip
 .PHONY: build_dist
 build_dist: install_build_tools
 	python -m build
+
+
+.PHONY: clean
+clean:
+	rm -rf .mypy_cache
+	rm -rf build
+	rm -rf dist
+	rm -rf django_opensearch_toolkit.egg-info
